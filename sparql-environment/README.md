@@ -28,8 +28,6 @@ Example: In Botony one can define "species" as "urn:cite:botcar:species cite:pos
 
 Define preset query strings for frequent queries. 
 
-**Save History**
-
 **Object/Verb Drag and Drop**
 
 Drag and drop objects from the results panel to query box.
@@ -37,3 +35,7 @@ Drag and drop objects from the results panel to query box.
 **Grammer Checker**
 
 Determine syntax errors before the query is sent.
+
+**Other**
+
+Save History, Color-coding Syntax
