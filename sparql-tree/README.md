@@ -1,5 +1,9 @@
 # SPARQL Tree
 
+*A javascript based visual tree used to navigate a SPARQL database. Good for navigating data and getting a feel for the relationships.*
+
+## Overview
+
 **tree.html?base=**
 
 Explore your SPARQL dataset by opening tree.html in a browser and adding the base get variabe. Set base to a valid object in the SPARQL database and a single node will appear. If you click on an object the tree will display all of the distinct verbs that can be called on that object. If you click on a verb it applies that verb to the object and displays the resulting objects.
