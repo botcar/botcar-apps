@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>SPARQL Environment</title>
+		<meta name="copyright" content="2014 W.S. Blackwell, W.S. Catron, S. Hill CC-License/by-nc-sa/3.0"/>
+		   
+	   	<!-- SparqPlugs Dependencies -->
+		<script src="http://d3js.org/d3.v3.min.js"></script> <!-- needed for: out.tree -->
+		
+		<!-- Environment Dependencies -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" ></script><!-- jQuery and jQuery UI -->
+	    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+	   	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="plugins/depend/jquery.jsonview.js"> </script>
+		<link href='plugins/depend/jquery.jsonview.css' rel='stylesheet' type='text/css'>
+		<script type="text/javascript" src="https://raw.githubusercontent.com/botcar/botcar-apps/master/jquery-sparql/jquery.sparql.js"> </script>
+		
+		<!-- Environment Files -->
+		<link rel="stylesheet" href="css/default.css" /> <!-- Default Theme -->
+		<script type="text/javascript" src="js/default.js"> </script>
+		
+		<script>
+		$(document).ready(function (){
+			$('body').loadEnvironment();
+		});
+		</script>
+		
+	</head>
+	<body>
+		<div id="menu"><div id="menu-title">SPARQL Environment</div></div>
+		<div id="workspace">
+			<div id="datasets">
+				<div class="panel-menu">
+					Datasets
+					<a class="icons" href="">&#xf067;</a>
+					<a class="icons" href="">&#xf01a;</a>
+				</div>
+				<div class="panel-list">
+					<ul>
+						<li>botcar</li>
+						<li>folio</li>
+						<li>cts</li>
+					<ul>
+				</div>
+			</div>
+			<div id="data-area">
+				<div id="data-input">
+					<div class="panel-menu"></div>
+					<div id="inputs">
+						<div id="inputs-text">
+							<textarea id="inputs-text-textarea">SELECT ?family ?genus ?species ?sname WHERE {
 
+	?species <http://folio.furman.edu/datans/bctaxon/childOf> ?genus .
+	?genus <http://folio.furman.edu/datans/bctaxon/childOf> ?family .
+	?species citedata:species_scientificNameText ?sname.
+	<urn:cite:botcar:genus> <http://www.ho
+
+}</textarea>
+						</div>
+					</div>
+				</div>
+				<div id="data-output">
+					<div class="panel-menu"></div>
+					<div id="data-output-results">
+						<ul>
+							<li>Last</li>
+							<li>SELECT ?o...</li>
+						</ul>
+					</div>
+					<div id="outputs">
+						<div id="outputs-json">
+							JSON
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="detail">
+				<div class="panel-menu">
+					<a href="">Detail One</a>
+					<a href="">Detail Two</a>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
