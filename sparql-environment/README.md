@@ -36,6 +36,8 @@ Drag and drop objects from the results panel to query box.
 
 Determine syntax errors before the query is sent.
 
+Grammer Defined: http://www.w3.org/TR/sparql11-query/#rSolutionModifier
+
 **Other**
 
 Save History, Color-coding Syntax
