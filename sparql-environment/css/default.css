@@ -1,0 +1,198 @@
+@import url(http://fonts.googleapis.com/css?family=Cutive+Mono);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+body {
+	margin:0px;
+	background:#EEEEEE;
+	font-family: 'Open Sans', sans-serif;
+}
+a {
+	text-decoration:none;
+}
+
+a:hover {
+	color:#666;
+}
+
+#menu {
+	width:calc(100% - 16px);
+	height:20px;
+	/*background:#C1CFE4;*/
+	background: #ffffff; /* Old browsers */
+	background: -moz-linear-gradient(top, #ffffff 0%, #dddddd 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#dddddd)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ffffff 0%,#dddddd 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ffffff 0%,#dddddd 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #ffffff 0%,#dddddd 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #ffffff 0%,#dddddd 100%); /* W3C */
+	margin:0px;
+	padding:8px;
+	border-bottom:1px solid #999;
+	font-size:16px;
+}
+
+#menu-title {
+	text-align: center;
+}
+
+#workspace {
+	width:100%;
+	height: calc( 100% - 37px );
+	position: fixed;
+}
+
+#datasets {
+	width:20%;
+	background: #FFF;
+	height: 100%;
+	float: left;
+	overflow: scroll;
+	z-index: 0;
+	background:#F3F5FA;
+}
+
+#datasets-icon {
+	color:#999;
+}
+
+#datasets ul {
+	margin: 0px;
+	padding: 5px;
+	font-size: 14px;
+}
+
+#data-area {
+	width: 60%;
+	float: left;
+	height: 100%;
+	border-right: 1px solid #AAA;
+	margin-right:-1px;
+	border-left: 1px solid #AAA;
+	margin-left:-1px;
+	z-index: 1;
+	position:relative;
+	background:#FFF;
+}
+
+#data-input {
+	width: 100%;
+	height: 50%;
+	border-bottom: 1px solid #999;
+	
+}
+
+#inputs {
+	height: calc(100% - 25px);
+}
+
+#inputs-text {
+	height: 100%;
+}
+
+#data-output {
+	width: 100%;
+	height: 50%;
+}
+#data-output-results {
+	width: 25%;
+	height: 100%;
+	border-right:1px solid #CCC;
+	overflow: scroll;
+	float: left;
+}
+
+#outputs {
+	width:calc(75% - 1px);
+	float: right;
+}
+
+#detail {
+	width:20%;
+	float: right;
+	z-index: 0;
+}
+
+.panel-menu {
+	width: calc(100% - 8px);
+	height: 16px;
+	border-bottom: 1px solid #BBB;
+	padding:4px;
+	font-size: 12px;
+	font-weight:600;
+}
+
+
+#data-output .panel-menu {
+	background:#EEE;
+}
+
+.panel-menu a {
+	color:#000;
+}
+.panel-menu a:hover {
+	color:#999;
+}
+
+#inputs-text-textarea {
+	font-size:16px;
+	font-family:"Cutive Mono";
+	height:100%;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	outline:0px;
+}
+
+#suggestion {
+	position:absolute;
+	width:25%;
+	height:calc(100% - 33px);
+	border-left:1px solid #CCC;
+	background:#DDD;
+	right:0px;
+	top:33px;
+}
+
+#output {
+	background: #DDD;
+	border-top: 1px solid #CCC;
+	height: 50%;
+	overflow: scroll;
+	position: absolute;
+	width:75%;
+	bottom:0px;
+}
+
+/* icons */
+
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('fontawesome-webfont.eot');
+  src: url('fontawesome-webfont.eot') format('embedded-opentype'),
+  url('fontawesome-webfont.woff') format('woff'),
+  url('fontawesome-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.icons {
+	font-family: FontAwesome;
+	font-weight: normal;
+}
+
+.panel-menu a {	
+	font-size: 16px;
+	float: right;
+	margin-left:4px;
+	font-weight: normal;
+}
+
+#datasets .panel-list li:before {	
+	font-size: 16px;
+	color: #333;
+	margin-left:4px;
+	margin-right:4px;
+	font-weight: normal;
+	content:'\f085';
+	font-family:FontAwesome;
+}
