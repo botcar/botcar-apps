@@ -10,16 +10,15 @@
 		<script type="text/javascript" src="../js/tokenizer.js"> </script>
 		
 		<script>
-		var testStrings = {
-		"1":"SELECT ?family ?genus ?species ?sname WHERE { ?species <http://folio.furman.edu/datans/bctaxon/childOf> ?genus . ?genus <http://folio.furman.edu/datans/bctaxon/childOf> ?family . ?species citedata:species_scientificNameText ?sname . }",
-		"2":"SELECT ?family ( expression AS ?var ) WHERE { ?species <http://folio.furman.edu/datans/bctaxon/childOf> ?genus . ?genus <http://folio.furman.edu/datans/bctaxon/childOf> ?family . ?species citedata:species_scientificNameText ?sname . }"
-	}
-	$.each(testStrings, function( index, value ) {
-	  	console.log("Testing Query: " + value );
-		tokenizer.queryString = value;				
-		tokenizer.tokenize();
-	});
-			
+			var testStrings = {
+			"1":"SELECT ?family ?genus ?species ?sname WHERE { ?species <http://folio.furman.edu/datans/bctaxon/childOf> ?genus . ?genus <http://folio.furman.edu/datans/bctaxon/childOf> ?family . ?species citedata:species_scientificNameText ?sname . }",
+			"2":"SELECT ?family ( expression AS ?var ) WHERE { ?species <http://folio.furman.edu/datans/bctaxon/childOf> ?genus . ?genus <http://folio.furman.edu/datans/bctaxon/childOf> ?family . ?species citedata:species_scientificNameText ?sname . }"
+			}
+			$.each(testStrings, function( index, value ) {
+		  		console.log("Testing Query: " + value );
+				tokenizer.queryString = value;				
+				tokenizer.tokenize();
+			});
 		</script>
 		
 	</head>
