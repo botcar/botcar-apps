@@ -1,0 +1,11 @@
+{
+	"source":"http://localhost:3030/ds/",
+	"prefixes":[
+		"cts:":"http://www.homermultitext.org/cts/rdf/",
+		"cite:":"http://www.homermultitext.org/cite/rdf/"
+	],
+	"variables":[
+		"?species":"<urn:cite:botcar:species> botcar:possesses ?species",
+		"?families":"<urn:cite:botcar:family> botcar:possesses ?families"
+	]
+}
