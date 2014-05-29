@@ -463,7 +463,7 @@ tokenizer.matchTriplesBlock = function () {
 		this.inform('Match TriplesBlock');
 		return true;
 	}
-	return false.
+	return false;
 }
 
 // GraphPatternNotTriples ::= GroupOrUnionGraphPattern | OptionalGraphPattern | MinusGraphPattern | GraphGraphPattern | ServiceGraphPattern | Filter | Bind | InlineData
@@ -675,12 +675,30 @@ tokenizer.matchConstructTriples = function () {
 
 // TriplesSameSubject ::= VarOrTerm PropertyListNotEmpty | TriplesNode PropertyList
 tokenizer.matchTriplesSameSubject = function () {
-	//TO-DO
+	if (this.matchVarOrTerm()) {
+		if (this.matchPropertyListNotEmpty()) {
+			this.inform('Match TriplesSameSubject');
+			return true;
+		}
+		this.error('No PropertyListNotEmpty after VarOrTerm');
+		return false;
+	}
+	else if (this.matchTriplesNode()) {
+		if (this.matchPropertyList()) {
+			this.inform('Match TriplesSameSubject');
+			return true;
+		}
+		this.error('No PropertyList after TriplesNode');
+		return false;
+	}
+	return false;
 }
 
 // PropertyList ::= PropertyListNotEmpty?
 tokenizer.matchPropertyList = function () {
-	//TO-DO
+	this.matchPropertyListNotEmpty();
+	this.inform('Match PropertyList');
+	return true;
 }
 
 // PropertyListNotEmpty ::= Verb ObjectList ( ';' ( Verb ObjectList )? )*
@@ -691,7 +709,7 @@ tokenizer.matchPropertyListNotEmpty = function () {
 // Verb ::= VarOrIri | 'a'
 tokenizer.matchVerb = function () {
 	var token = this.currentToken();
-	if (this.matchVarOrIri() || token = 'a') {
+	if (this.matchVarOrIri() || token == 'a') {
 		this.inform('Match Verb');
 		return true;
 	}
@@ -700,7 +718,19 @@ tokenizer.matchVerb = function () {
 
 // ObjectList ::= Object ( ',' Object )*
 tokenizer.matchObjectList = function () {
-	//TO-DO
+	if (this.matchObject()) {
+		var token = this.nextToken();
+		while (token == ',') {
+			this.nextToken()
+			if  (this.matchObject()) {
+				this.nextToken();
+			}
+			else this.error('No Object after \',\'');
+		}
+		this.inform('Match ObjectList');
+		return true;
+	}
+	return false;
 }
 
 // Object ::= GraphNode
@@ -710,12 +740,30 @@ tokenizer.matchObject = function () {
 
 // TriplesSameSubjectPath ::= VarOrTerm PropertyListPathNotEmpty | TriplesNodePath PropertyListPath
 tokenizer.matchTriplesSameSubjectPath = function () {
-	//TO-DO
+	if (this.matchVarOrTerm()) {
+		if (this.matchPropertyListPathNotEmpty()) {
+			this.inform('Match TriplesSameSubjectPath');
+			return true;
+		}
+		this.error('No PropertyListPathNotEmpty after VarOrTerm');
+		return false;
+	}
+	else if (this.matchTriplesNodePath()) {
+		if (this.matchPropertyListPath()) {
+			this.inform('Match TriplesSameSubjectPath');
+			return true;
+		}
+		this.error('No PropertyListPath after TriplesNodePath');
+		return false;
+	}
+	return false;
 }
 
 // PropertyListPath ::= PropertyListPathNotEmpty?
 tokenizer.matchPropertyListPath = function () {
-	//TO-DO
+	this.matchPropertyListPathNotEmpty();
+	this.inform('Match PropertyListPath');
+	return true;
 }
 
 // PropertyListPathNotEmpty ::= ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
@@ -735,7 +783,19 @@ tokenizer.matchVerbSimple = function () {
 
 // ObjectListPath ::= ObjectPath ( ',' ObjectPath )*
 tokenizer.matchObjectListPath = function () {
-	//TO-DO
+	if (this.matchObjectPath()) {
+		var token = this.nextToken();
+		while (token == ',') {
+			this.nextToken()
+			if  (this.matchObjectPath()) {
+				this.nextToken();
+			}
+			else this.error('No ObjectPath after \',\'');
+		}
+		this.inform('Match ObjectListPath');
+		return true;
+	}
+	return false;
 }
 
 // ObjectPath ::= GraphNodePath
@@ -859,7 +919,7 @@ tokenizer.matchVarOrTerm = function () {
 }
 
 // VarOrIri ::= Var | iri
-tokenizer.matchVarOrIri = function () {
+tokenizer.matchVarOrIri = function (text) {
 	if (this.matchVar() || this.matchiri()) {
 		this.inform('Match VarOrIri');
 		return true;
@@ -879,8 +939,8 @@ tokenizer.matchVar = function () {
 }
 
 // GraphTerm ::= iri | RDFLiteral | NumericLiteral | BooleanLiteral | BlankNode | NIL
-tokenizer.matchGraphTerm = function () {
-	if (this.matchiri() || this.matchRDFLiteral() || this.matchNumericLiteral() || this.matchBooleanLiteral() || this.matchBlankNode() || this.matchNIL()) {
+tokenizer.matchGraphTerm = function (term) {
+	if (this.matchiri(term) || this.matchRDFLiteral(term) || this.matchNumericLiteral(term) || this.matchBooleanLiteral(term) || this.matchBlankNode(term) || this.matchNIL(term)) {
 		this.inform('Match GraphTerm');
 		return true;
 	}
@@ -1048,47 +1108,84 @@ tokenizer.matchRDFLiteral = function () {
 }
 
 // NumericLiteral ::= NumericLiteralUnsigned | NumericLiteralPositive | NumericLiteralNegative
-tokenizer.matchNumericLiteral = function () {
+tokenizer.matchNumericLiteral = function (ints) {
+	if (this.matchNumericLiteralUnsigned(ints) || this.matchNumericLiteralPositive(ints) || this.matchNumericLiteralNegative(ints)) {
+		this.inform('Match NumericLiteralNegative');
+		return true;
+	}
+	return false;
 }
 
 // NumericLiteralUnsigned ::= INTEGER | DECIMAL | DOUBLE
-tokenizer.matchNumericLiteralUnsigned = function () {
-	//TO-DO
+tokenizer.matchNumericLiteralUnsigned = function (ints) {
+	if (this.matchINTEGER(ints) || this.matchDECIMAL(ints) || this.matchDOUBLE(ints)) {
+		this.inform('Match NumericLiteral');
+		return true;
+	}
+	return false;
 }
 
 // NumericLiteralPositive ::= INTEGER_POSITIVE | DECIMAL_POSITIVE | DOUBLE_POSITIVE
-tokenizer.matchNumericLiteralPositive = function () {
-	// TO-DO
+tokenizer.matchNumericLiteralPositive = function (ints) {
+	if (this.matchINTEGER_POSITIVE(ints) || this.matchDECIMAL_POSITIVE(ints) || this.matchDOUBLE_POSITIVE(ints)) {
+		this.inform('Match NumericLiteralPositive');
+		return true;
+	}
+	return false;
 }
 
 // NumericLiteralNegative ::= INTEGER_NEGATIVE | DECIMAL_NEGATIVE | DOUBLE_NEGATIVE
-tokenizer.matchNumericLiteralNegative = function () {
-	// TO-DO
+tokenizer.matchNumericLiteralNegative = function (ints) {
+	if (this.matchINTEGER_NEGATIVE(ints) || this.matchDECIMAL_NEGATIVE(ints) || this.matchDOUBLE_NEGATIVE(ints)) {
+		this.inform('Match NumericLiteralNegative');
+		return true;
+	}
+	return false;
 }
 
 // BooleanLiteral ::= 'true' | 'false'
-tokenizer.matchBooleanLiteral = function () {
-	//TO-DO
+tokenizer.matchBooleanLiteral = function (bool) {
+	if (bool == true || bool == false) {
+		this.inform('Match BooleanLiteral');
+		return true;
+	}
+	return false;
 }
 
 // String ::= STRING_LITERAL1 | STRING_LITERAL2 | STRING_LITERAL_LONG1 | STRING_LITERAL_LONG2
-tokenizer.matchString = function () {
-	//TO-DO
+tokenizer.matchString = function (string) {
+	if (this.matchSTRING_LITERAL1(string) || this.matchSTRING_LITERAL2(string) || this.matchSTRING_LITERAL_LONG1(string) || this.matchSTRING_LITERAL_LONG2(string)) {
+		this.inform('Match String');
+		return true;
+	}
+	return false;
 }
 
 // iri ::= IRIREF | PrefixedName
-tokenizer.matchiri = function () {
-	//TO-DO
+tokenizer.matchiri = function (name) {
+	if (this.matchIRIREF(name) || this.matchPrefixedName(name)) {
+		this.inform('Match iri');
+		return true;
+	}
+	return false;
 }
 
 // PrefixedName ::= PNAME_LN | PNAME_NS
-tokenizer.matchPrefixedName = function () {
-	//TO-DO
+tokenizer.matchPrefixedName = function (name) {
+	if (this.matchPNAME_LN(name) || this.matchPNAME_NS(name)) {
+		this.inform('Match PrefixedName');
+		return true;
+	}
+	return false;
 }
 
 // BlankNode ::= BLANK_NODE_LABEL |	ANON
-tokenizer.matchBlankNode = function () {
-	//TO-DO
+tokenizer.matchBlankNode = function (node) {
+	if (this.matchBLANK_NODE_LABEL(node) || this.matchANON(node)) {
+		this.inform('Match BlankNode');
+		return true;
+	}
+	return false;
 }
 
 // #################################################################################################
