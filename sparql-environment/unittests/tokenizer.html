@@ -7,16 +7,17 @@
 		
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" ></script><!-- jQuery and jQuery UI -->
 
-		<script type="text/javascript" src="../js/tokenizer.js"> </script>
+		<script type="text/javascript" src="../js/tokenizer.js"></script>
 		
 		<script>
 			var testStrings = {
 			"1":"SELECT ?family ?genus ?species ?sname WHERE { ?species <http://folio.furman.edu/datans/bctaxon/childOf> ?genus . ?genus <http://folio.furman.edu/datans/bctaxon/childOf> ?family . ?species citedata:species_scientificNameText ?sname . }",
-			"2":"SELECT ?family ( expression AS ?var ) WHERE { ?species <http://folio.furman.edu/datans/bctaxon/childOf> ?genus . ?genus <http://folio.furman.edu/datans/bctaxon/childOf> ?family . ?species citedata:species_scientificNameText ?sname . }"
+			"2":"SELECT ?family ( expression AS ?var ) WHERE { ?species <http://folio.furman.edu/datans/bctaxon/childOf> ?genus . ?genus <http://folio.furman.edu/datans/bctaxon/childOf> ?family . ?species citedata:species_scientificNameText ?sname . }",
+			"3":"prefix cts: <http://www.homermultitext.org/cts/rdf/> prefix cite: <http://www.homermultitext.org/cite/rdf/> prefix hmt: <http://www.homermultitext.org/hmt/rdf/> SELECT * WHERE { ?o rdf:type ?s }"
 			}
 			$.each(testStrings, function( index, value ) {
 		  		console.log("Testing Query: " + value );
-				tokenizer.queryString = value;				
+				tokenizer.queryString = value;
 				tokenizer.tokenize();
 			});
 		</script>
