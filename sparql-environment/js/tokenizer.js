@@ -433,7 +433,8 @@ tokenizer.matchGroupGraphPattern = function () {
 
 // GroupGraphPatternSub ::= TriplesBlock? ( GraphPatternNotTriples '.'? TriplesBlock? )*
 tokenizer.matchGroupGraphPatternSub = function () {
-	//TO-DO
+	var token = tokenizer.currentToken();
+	//
 }
 
 // TriplesBlock ::= TriplesSameSubjectPath ( '.' TriplesBlock? )?
