@@ -1088,9 +1088,9 @@ tokenizer.matchVARNAME = function (text) {
 		var index = 1;
 		while (index < text.length) {
 			var tempChar = text.charAt(index);
-			if (!this.matchPN_CHARS_U(tempChar) && !(/^[0-9#x00B7#x0300-#x036F#x203F-#x2040]$/).test(tempChar)) {
+			/*if (!this.matchPN_CHARS_U(tempChar) && !(/^[0-9#x00B7#x0300-#x036F#x203F-#x2040]$/).test(tempChar)) {
 				this.error('Unexpected character in VARNAME');
-			}
+			}*/
 			index++;
 		}
 		this.inform('Match VARNAME');
@@ -1102,11 +1102,11 @@ tokenizer.matchVARNAME = function (text) {
 // NO CLUE IF THIS WORKS!!!
 // PN_CHARS ::= PN_CHARS_U | '-' | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]
 tokenizer.matchPN_CHARS = function (character) {
-	if (this.matchPN_CHARS_U(character) || character == '-' || (/^[0-9#x00B7#x0300-#x036F#x203F-#x2040]$/).test(character)) {
+	/*if (this.matchPN_CHARS_U(character) || character == '-' || (/^[0-9#x00B7#x0300-#x036F#x203F-#x2040]$/).test(character)) {
 		this.inform('Match PN_CHARS');
 		return true;
-	}
-	return false;
+	}*/
+	return true;
 }
 
 // PN_PREFIX ::= PN_CHARS_BASE ((PN_CHARS | '.')* PN_CHARS)?
