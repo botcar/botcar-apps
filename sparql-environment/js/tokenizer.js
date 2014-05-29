@@ -1154,7 +1154,7 @@ tokenizer.matchHEX = function (character) {
 // PN_LOCAL_ESC ::= '\' ( '_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | '/' | '?' | '#' | '@' | '%' )
 tokenizer.matchPN_LOCAL_ESC = function (text) {
 	var secondChar = text.charAt(1);
-	if (token.charAt(0); == '\\') {
+	if (token.charAt(0) == '\\') {
 		if (secondChar == '_' || secondChar == '~' || secondChar == '.' || secondChar == '-' || secondChar == '!' || secondChar ==  '$' || secondChar == '&' || secondChar == "'" || secondChar == '(' || secondChar == ')' || secondChar == '*' || secondChar == '+' || secondChar == ',' || secondChar == ';' || secondChar == '=' || secondChar == '/' || secondChar == '?' || secondChar == '#' || secondChar == '@' || secondChar == '%') {
 			this.inform('Match PN_LOCAL_ESC');
 			return true;
