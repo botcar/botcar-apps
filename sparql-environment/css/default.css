@@ -1,4 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+@import url(http://fonts.googleapis.com/css?family=Cutive+Mono);
 
 body {
 	margin:0px;
@@ -260,4 +261,19 @@ a:hover {
 #import-config-btn {
 	width:40px;
 	float:right;
+}
+
+/* history */
+
+#data-output-history li {
+	border-bottom: 1px solid #CCC;
+	font-size:12px;
+	padding:2px;
+	font-family:"Cutive Mono";
+	word-wrap: break-word;
+}
+
+#data-output-history ul {
+	margin:0px;
+	padding:0px;
 }
