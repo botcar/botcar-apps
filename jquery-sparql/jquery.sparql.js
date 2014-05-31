@@ -6,8 +6,7 @@
 	        $.fn.defaults = opts;
 		}
 		query = $.fn.defaults.prefix + query;
-		var json = $.parseJSON(
-		    $.ajax(
+		var json_string = $.ajax(
 		        {
 		           url: $.fn.defaults.source+"query", 
 				   data: {"query":query},
@@ -15,10 +14,15 @@
 		           async: false, 
 		           dataType: 'json'
 		        }
-		    ).responseText
-		);
-		//ERROR CHECKING
-		return json.results.bindings;
+		    ).responseText;
+		if (json_string.indexOf('ERROR') == -1) {
+			var json = $.parseJSON(json_string);
+			return json.results.bindings;
+		}
+		//ERROR
+		
+		return {"error":true,"response":json_string}; //evenutally parse code and other data
+		
 	}
 	
 	$.fn.verbsForObject = function (object) {
@@ -69,3 +73,4 @@
 	
 	
 }( jQuery ));
+
