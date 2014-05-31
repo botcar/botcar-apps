@@ -129,7 +129,7 @@ a:hover {
 	height: 50%;
 }
 #data-output-history {
-	width: 25%;
+	width: calc(25% - 1px);
 	height: 100%;
 	border-right:1px solid #CCC;
 	overflow: scroll;
