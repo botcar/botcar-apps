@@ -139,6 +139,7 @@ a:hover {
 #data-output-results {
 	width: 75%;
 	float: right;
+	height:100%;
 }
 
 #detail {
@@ -219,6 +220,16 @@ a:hover {
 	position: absolute;
 	width:75%;
 	bottom:0px;
+}
+
+#outputs {
+	height: calc(100% - 25px);
+	overflow:hidden;
+}
+
+.plugin-out {
+	height:100%;
+	width:100%;
 }
 
 /* icons */
