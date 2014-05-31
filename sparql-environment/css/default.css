@@ -1,5 +1,5 @@
-@import url(http://fonts.googleapis.com/css?family=Cutive+Mono);
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+
 body {
 	margin:0px;
 	background:#EEEEEE;
@@ -11,6 +11,7 @@ a {
 
 a:hover {
 	color:#666;
+	cursor: pointer;
 }
 
 #menu {
@@ -56,8 +57,37 @@ a:hover {
 
 #datasets ul {
 	margin: 0px;
-	padding: 5px;
+	padding: 0px;
 	font-size: 14px;
+}
+
+#datasets .panel-list li {
+	cursor: pointer;
+}
+#datasets .panel-list .selected {
+	background:#CCC;
+}
+
+#import-config-file {
+	padding: 10px;
+	margin: 5px;
+	border: 1px dashed #666;
+	border-radius: 5px;
+	font-size: 16px;
+}
+#import-config-file-hide {
+	float: right;
+	font-weight: bold;
+	font-size: 12px;
+	opacity: .25;
+	margin-top: -2px;
+	
+}
+
+.panel-list li {
+	padding-top:3px;
+	padding-left:4px;
+	padding-bottom: 3px;
 }
 
 #data-area {
@@ -82,6 +112,11 @@ a:hover {
 
 #inputs {
 	height: calc(100% - 25px);
+	overflow:hidden;
+}
+
+.plugin-in {
+	height:100%;
 }
 
 #inputs-text {
@@ -92,7 +127,7 @@ a:hover {
 	width: 100%;
 	height: 50%;
 }
-#data-output-results {
+#data-output-history {
 	width: 25%;
 	height: 100%;
 	border-right:1px solid #CCC;
@@ -100,8 +135,8 @@ a:hover {
 	float: left;
 }
 
-#outputs {
-	width:calc(75% - 1px);
+#data-output-results {
+	width: 75%;
 	float: right;
 }
 
@@ -120,6 +155,39 @@ a:hover {
 	font-weight:600;
 }
 
+.panel-menu-title {
+	float:left;
+}
+
+.panel-menu-tabs {
+	margin-left:-4px;
+	float:left;
+}
+
+.panel-menu-tabs a {
+	border-left: 1px solid #CCC;
+	margin-top: -4px;
+	margin-bottom: -4px;
+	padding-bottom: 4px;
+	padding-top: 3px;
+	padding-right: 4px;
+	padding-left: 4px;
+	font-size: 12px;
+	float:left;
+	color:#999;
+}
+
+.panel-menu-tabs .selected {
+	background:#FFF;
+	color:#000;
+}
+
+.panel-menu-tabs a:last-child {
+	border-right: 1px solid #CCC;
+}
+.panel-menu-tabs a:first-child {
+	border-left: none;
+}
 
 #data-output .panel-menu {
 	background:#EEE;
@@ -130,17 +198,6 @@ a:hover {
 }
 .panel-menu a:hover {
 	color:#999;
-}
-
-#inputs-text-textarea {
-	font-size:16px;
-	font-family:"Cutive Mono";
-	height:100%;
-	width: 100%;
-	margin: 0px;
-	padding: 0px;
-	border: 0px;
-	outline:0px;
 }
 
 #suggestion {
@@ -178,10 +235,10 @@ a:hover {
 .icons {
 	font-family: FontAwesome;
 	font-weight: normal;
+	font-size: 16px;
 }
 
-.panel-menu a {	
-	font-size: 16px;
+.panel-menu-tools {	
 	float: right;
 	margin-left:4px;
 	font-weight: normal;
@@ -195,4 +252,12 @@ a:hover {
 	font-weight: normal;
 	content:'\f085';
 	font-family:FontAwesome;
+}
+
+#import-config-url {
+	width:calc(100% - 75px);
+}
+#import-config-btn {
+	width:40px;
+	float:right;
 }

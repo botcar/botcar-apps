@@ -1,11 +1,14 @@
 {
+	"name":"botcar",
+	"description":"Botanical specimen information from Lorde and Catesby's trips to SC",
 	"source":"http://localhost:3030/ds/",
-	"prefixes":[
+	"prefixes":{
 		"cts:":"http://www.homermultitext.org/cts/rdf/",
 		"cite:":"http://www.homermultitext.org/cite/rdf/"
-	],
-	"variables":[
+	},
+	"variables":{
 		"?species":"<urn:cite:botcar:species> botcar:possesses ?species",
 		"?families":"<urn:cite:botcar:family> botcar:possesses ?families"
-	]
+	},
+	"plugins":["sparqplug-in-text","sparqplug-out-json"]
 }

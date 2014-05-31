@@ -1,0 +1,12 @@
+{
+	"name":"fufolio",
+	"description":"Furman University Classics Dataset",
+	"source":"http://folio.furman.edu/",
+	"prefixes":{
+		"cts:":"http://www.homermultitext.org/cts/rdf/",
+		"cite:":"http://www.homermultitext.org/cite/rdf/"
+	},
+	"variables":{
+	},
+	"plugins":["sparqplug-in-text","sparqplug-in-objectbased"]
+}

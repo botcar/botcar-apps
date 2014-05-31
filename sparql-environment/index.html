@@ -12,20 +12,14 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" ></script><!-- jQuery and jQuery UI -->
 	    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
 	   	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
-		<script type="text/javascript" src="plugins/depend/jquery.jsonview.js"> </script>
-		<link href='plugins/depend/jquery.jsonview.css' rel='stylesheet' type='text/css'>
-		<script type="text/javascript" src="https://raw.githubusercontent.com/botcar/botcar-apps/master/jquery-sparql/jquery.sparql.js"> </script>
+		<!--<script type="text/javascript" src="plugins/depend/jquery.jsonview.js"> </script>
+		<link href='plugins/depend/jquery.jsonview.css' rel='stylesheet' type='text/css'>-->
+		<script type="text/javascript" src="../jquery-sparql/jquery.sparql.js"> </script>
 		
 		<!-- Environment Files -->
 		<link rel="stylesheet" href="css/default.css" /> <!-- Default Theme -->
 		<script type="text/javascript" src="js/default.js"> </script>
-		<script type="text/javascript" src="js/tokenizer.js"> </script>
-		
-		<script>
-		$(document).ready(function (){
-			$('body').loadEnvironment();
-		});
-		</script>
+		<!--<script type="text/javascript" src="js/tokenizer.js"> </script>-->
 		
 	</head>
 	<body>
@@ -34,49 +28,64 @@
 			<div id="datasets">
 				<div class="panel-menu">
 					<span id="datasets-icon" class="icons">&#xf1c0;</span> Datasets
-					<a class="icons" title="Import configuration" href="">&#xf01b;</a>
-					<a class="icons" title="Export configuration" href="">&#xf01a;</a>
+					<a class="icons panel-menu-tools" title="Export configuration" id="export-config-button">&#xf01b;</a>
+					<a class="icons panel-menu-tools" title="Import configuration" id="import-config-button">&#xf01a;</a>
 				</div>
 				<div class="panel-list">
 					<ul>
 						<li>botcar</li>
 						<li>folio</li>
 						<li>cts</li>
-					<ul>
+					</ul>
+					<div id='import-config-file'>Drag Config File Here<a id="import-config-file-hide">Hide</a></div>
 				</div>
 			</div>
 			<div id="data-area">
 				<div id="data-input">
 					<div class="panel-menu">
-						<span id="datasets-icon" class="icons">&#xf040;</span> SPARQL Query Editor
-						<a class="icons" title="SparqIt" href="">&#xf045;</a>
+						
+						<div class="panel-menu-tabs">
+							<!--<a href="javascript:environment.viewPlugin('sparqplug-in-objectbased');"  id='sparqplug-in-objectbased-tab'><span class="icons">&#xf041;</span> Geo Search</a>-->
+						</div>
+						<a class="icons panel-menu-tools" title="SparqIt" href="">&#xf045;</a>
 					</div>
 					<div id="inputs">
-						<div id="inputs-text">
-							<textarea id="inputs-text-textarea">SELECT ?family ?genus ?species ?sname WHERE {
+						<!--<div class='plugin-in' id='sparqplug-in-text'>
+								<textarea id="inputs-text-textarea">SELECT ?family ?genus ?species ?sname WHERE {
 
-	?species <http://folio.furman.edu/datans/bctaxon/childOf> ?genus .
-	?genus <http://folio.furman.edu/datans/bctaxon/childOf> ?family .
-	?species citedata:species_scientificNameText ?sname.
-	<urn:cite:botcar:genus> <http://www.ho
+		?species <http://folio.furman.edu/datans/bctaxon/childOf> ?genus .
+		?genus <http://folio.furman.edu/datans/bctaxon/childOf> ?family .
+		?species citedata:species_scientificNameText ?sname.
+		<urn:cite:botcar:genus> <http://www.ho
 
-}</textarea>
+	}</textarea>
 						</div>
+						<div class='plugin-in' id='sparqplug-in-objectbased'>
+							Pick objects
+						</div>-->
 					</div>
 				</div>
 				<div id="data-output">
-					<div class="panel-menu">
-						<span id="datasets-icon" class="icons">&#xf1c9;</span> SPARQL Results JSON Viewer
-						<a class="icons" title="SparqIt" href="">&#xf045;</a></div>
-					<div id="data-output-results">
+					<div id="data-output-history">
+						<div class="panel-menu">
+							<span id="datasets-icon" class="icons">&#xf1da;</span> History
+						</div>
 						<ul>
 							<li>Last</li>
 							<li>SELECT ?o...</li>
 						</ul>
 					</div>
-					<div id="outputs">
-						<div id="outputs-json">
+					<div id="data-output-results">
+						<div class="panel-menu">
+							<div class="panel-menu-tabs">
+								<a href="javascript:environment.viewPlugin('sparqplug-in-objectbased');"  id='sparqplug-in-objectbased-tab'><span class="icons">&#xf041;</span> Map</a>
+							</div>
+							<a class="icons panel-menu-tools" title="SparqIt" href="">&#xf045;</a>
+						</div>
+						<div id="outputs">
+							<div class="output">
 							JSON
+							</div>
 						</div>
 					</div>
 				</div>
@@ -84,7 +93,7 @@
 			<div id="detail">
 				<div class="panel-menu">
 					<span id="datasets-icon" class="icons">&#xf05a;</span> Detail Panel
-					<a class="icons" title="Help" href="">&#xf128;</a>
+					<a class="icons panel-menu-tools" title="Help" href="">&#xf128;</a>
 				</div>
 			</div>
 		</div>

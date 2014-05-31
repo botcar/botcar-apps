@@ -15,7 +15,7 @@
 		           dataType: 'json'
 		        }
 		    ).responseText;
-		if (json_string.indexOf('ERROR') == -1) {
+		if (json_string.indexOf('Error') == -1) {
 			var json = $.parseJSON(json_string);
 			return json.results.bindings;
 		}
