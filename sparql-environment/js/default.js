@@ -95,6 +95,7 @@ environment.importConfig = function (file) {
 environment.importConfigJSON = function (json) {
 	console.log('JSON: '+json);
 	new_config = JSON.parse(json);
+	new_config.history = [];
 	this.config[new_config.name] = new_config;
 	this.currentDataset = new_config.name;
 	this.save();
@@ -157,7 +158,8 @@ environment.loadDataset = function (dataset) {
 	$.each(environment.config[dataset].plugins,function (index,value) {
 		environment.loadPlugin(value);
 	});	
-	
+
+	this.loadHistory();
 	
 }
 
@@ -230,8 +232,52 @@ environment.performQuery = function (query) {
 		plugins[this.currentInPlugin].error(results.response);
 		return;
 	}
-	environment.latestQuery = query;
-	environment.latestResults = results;
+	this.latestQuery = query;
+	this.latestResults = results;
+	
+	this.addToHistory(query);
 	
 	plugins[this.currentOutPlugin].updateUI();
 }
+
+//History
+
+environment.addToHistory = function (query) {
+	$("#data-output-history ul").prepend(environment.createHistoryli(query,this.config[this.currentDataset].history.length));
+	
+	this.config[this.currentDataset].history.push(query);
+	this.save();
+}
+
+environment.loadHistory = function () {
+	$("#data-output-history ul").children().remove();
+	
+	$.each(this.config[this.currentDataset].history, function (index, value) {
+		$("#data-output-history ul").prepend(environment.createHistoryli(value,index));
+	});
+}
+
+environment.createHistoryli = function (query, index) {
+	li = $("<li/>",{
+				text: query
+			}).data('history-index',index).click(function(){
+				query = this.innerHTML;
+				environment.loadFromHistory($(this).data('history-index'));
+			});
+			return li;
+}
+
+environment.loadFromHistory = function (index) {
+	query = this.config[this.currentDataset].history[index];
+	this.latestQuery = query;
+	var results = $(document).query(query,this.config[environment.currentDataset]);
+	if (results.error) {
+		alert('History Item had Error!');
+		return;
+	}
+	this.latestResults = results;
+	
+	plugins[this.currentInPlugin].updateUI();
+	plugins[this.currentOutPlugin].updateUI();
+}
+

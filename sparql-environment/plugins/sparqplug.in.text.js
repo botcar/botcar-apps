@@ -13,7 +13,8 @@ sparqplug.in.text.error = function (error) {
 }
 
 sparqplug.in.text.updateUI = function () {
-	$('sp-in-text-textarea').attr("value", environment.latestQuery);
+	console.log("updateUI in.text");
+	$('#sp-in-text-textarea').val(environment.latestQuery);
 }
 
 //Plugin Specific
