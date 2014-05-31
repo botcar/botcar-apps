@@ -281,3 +281,10 @@ environment.loadFromHistory = function (index) {
 	plugins[this.currentOutPlugin].updateUI();
 }
 
+environment.clearHistory = function () {
+	this.config[this.currentDataset].history = [];
+	this.save();
+	
+	this.loadHistory();
+}
+
