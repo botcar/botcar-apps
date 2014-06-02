@@ -435,21 +435,20 @@ tokenizer.matchGroupGraphPattern = function () {
 
 // GroupGraphPatternSub ::= TriplesBlock? ( GraphPatternNotTriples '.'? TriplesBlock? )*
 tokenizer.matchGroupGraphPatternSub = function () {
-	if (this.TriplesBlock()) {
+	if (this.matchTriplesBlock()) {
 		this.nextToken();
-		while (this.matchGraphPatternNotTriples()) {
-			var token = this.nextToken();
-			if (token == '.') {
+	}
+	while (this.matchGraphPatternNotTriples()) {
+		var token = this.nextToken();
+		if (token == '.') {
+			this.nextToken();
+			if (this.matchTriplesBlock) {
 				this.nextToken();
-				if (this.matchTriplesBlock) {
-					this.nextToken();
-				}
 			}
 		}
-		this.inform('Match GroupGraphPatternSub');
-		return true;
 	}
-	return false;
+	this.inform('Match GroupGraphPatternSub');
+	return true;
 }
 
 // TriplesBlock ::= TriplesSameSubjectPath ( '.' TriplesBlock? )?
@@ -589,11 +588,13 @@ tokenizer.matchDataBlock = function () {
 // InlineDataOneVar ::= Var '{' DataBlockValue* '}'
 tokenizer.matchInlineDataOneVar = function () {
 	//TO-DO
+	return true;
 }
 
 // InlineDataFull ::= ( NIL | '(' Var* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
 tokenizer.matchInlineDataFull = function () {
 	//TO-DO
+	return true;
 }
 
 // DataBlockValue ::= iri |	RDFLiteral | NumericLiteral | BooleanLiteral | 'UNDEF'
@@ -622,7 +623,8 @@ tokenizer.matchMinusGraphPattern = function () {
 
 // GroupOrUnionGraphPattern ::= GroupGraphPattern ( 'UNION' GroupGraphPattern )*
 tokenizer.matchGroupOrUnionGraphPattern = function () {
-	//TO-DO
+	return true;
+	// TO-DO
 }
 
 // Filter ::= 'FILTER' Constraint
@@ -703,7 +705,29 @@ tokenizer.matchPropertyList = function () {
 
 // PropertyListNotEmpty ::= Verb ObjectList ( ';' ( Verb ObjectList )? )*
 tokenizer.matchPropertyListNotEmpty = function () {
-	//TO-DO
+	if (this.matchVerb()) {
+		this.nextToken();
+		if (this.matchObjectList()) {
+			var token = this.nextToken();
+			while (token == ';') {
+				this.nextToken()
+				if  (this.matchVerb()) {
+					this.nextToken();
+					if (this.matchObjectList()) {
+						this.nextToken();
+					}
+					else this.error('No ObjectList after Verb');
+				}
+				else this.error('No Verb after \';\'');
+			}
+		}
+		else {
+			this.error('No ObjectList after Verb');
+		}
+		this.inform('Match PropertyListNotEmpty');
+		return true;
+	}
+	return false;
 }
 
 // Verb ::= VarOrIri | 'a'
