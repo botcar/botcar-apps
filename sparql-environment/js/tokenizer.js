@@ -117,10 +117,10 @@ tokenizer.matchPrefixDecl = function () {
 tokenizer.matchSelectQuery = function () {
 	if (this.matchSelectClause()) {
 		this.inform('Match SelectClause');
-		token = this.nextToken();
+		//this.nextToken();
 		if (this.matchWhereClause()) {
 			this.inform('Match WhereClause');
-			token = this.nextToken();
+			this.nextToken();
 		}
 		return true;
 	}
@@ -132,10 +132,10 @@ tokenizer.matchSelectQuery = function () {
 tokenizer.matchSubSelect = function () {
 	if (this.matchSelectClause()) {
 		this.inform('Match SelectClause');
-		token = this.nextToken();
+		//this.nextToken();
 		if (this.matchWhereClause()) {
 			this.inform('Match WhereClause');
-			token = this.nextToken();
+			this.nextToken();
 		}
 		return true;
 	}
@@ -419,6 +419,7 @@ tokenizer.matchTriplesTemplate = function () {
 tokenizer.matchGroupGraphPattern = function () {
 	var token = this.currentToken();
 	if (token == '{') {
+		this.nextToken();
 		if (this.matchSubSelect() || this.matchGroupGraphPatternSub()) {
 			token = this.nextToken();
 			if (token != '}') {
@@ -435,21 +436,20 @@ tokenizer.matchGroupGraphPattern = function () {
 
 // GroupGraphPatternSub ::= TriplesBlock? ( GraphPatternNotTriples '.'? TriplesBlock? )*
 tokenizer.matchGroupGraphPatternSub = function () {
-	if (this.TriplesBlock()) {
+	if (this.matchTriplesBlock()) {
 		this.nextToken();
-		while (this.matchGraphPatternNotTriples()) {
-			var token = this.nextToken();
-			if (token == '.') {
+	}
+	while (this.matchGraphPatternNotTriples()) {
+		var token = this.nextToken();
+		if (token == '.') {
+			this.nextToken();
+			if (this.matchTriplesBlock) {
 				this.nextToken();
-				if (this.matchTriplesBlock) {
-					this.nextToken();
-				}
 			}
 		}
-		this.inform('Match GroupGraphPatternSub');
-		return true;
 	}
-	return false;
+	this.inform('Match GroupGraphPatternSub');
+	return true;
 }
 
 // TriplesBlock ::= TriplesSameSubjectPath ( '.' TriplesBlock? )?
@@ -589,11 +589,13 @@ tokenizer.matchDataBlock = function () {
 // InlineDataOneVar ::= Var '{' DataBlockValue* '}'
 tokenizer.matchInlineDataOneVar = function () {
 	//TO-DO
+	return true;
 }
 
 // InlineDataFull ::= ( NIL | '(' Var* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
 tokenizer.matchInlineDataFull = function () {
 	//TO-DO
+	return true;
 }
 
 // DataBlockValue ::= iri |	RDFLiteral | NumericLiteral | BooleanLiteral | 'UNDEF'
@@ -622,7 +624,8 @@ tokenizer.matchMinusGraphPattern = function () {
 
 // GroupOrUnionGraphPattern ::= GroupGraphPattern ( 'UNION' GroupGraphPattern )*
 tokenizer.matchGroupOrUnionGraphPattern = function () {
-	//TO-DO
+	return false;
+	// TO-DO
 }
 
 // Filter ::= 'FILTER' Constraint
@@ -676,14 +679,16 @@ tokenizer.matchConstructTriples = function () {
 // TriplesSameSubject ::= VarOrTerm PropertyListNotEmpty | TriplesNode PropertyList
 tokenizer.matchTriplesSameSubject = function () {
 	if (this.matchVarOrTerm()) {
+		this.nextToken();
 		if (this.matchPropertyListNotEmpty()) {
 			this.inform('Match TriplesSameSubject');
 			return true;
 		}
 		this.error('No PropertyListNotEmpty after VarOrTerm');
-		return false;
+		return false;		
 	}
 	else if (this.matchTriplesNode()) {
+		this.nextToken();
 		if (this.matchPropertyList()) {
 			this.inform('Match TriplesSameSubject');
 			return true;
@@ -703,7 +708,30 @@ tokenizer.matchPropertyList = function () {
 
 // PropertyListNotEmpty ::= Verb ObjectList ( ';' ( Verb ObjectList )? )*
 tokenizer.matchPropertyListNotEmpty = function () {
-	//TO-DO
+	this.inform('Checking PropertyListNotEmpty');
+	if (this.matchVerb()) {
+		this.nextToken();
+		if (this.matchObjectList()) {
+			var token = this.nextToken();
+			while (token == ';') {
+				this.nextToken()
+				if  (this.matchVerb()) {
+					this.nextToken();
+					if (this.matchObjectList()) {
+						this.nextToken();
+					}
+					else this.error('No ObjectList after Verb');
+				}
+				else this.error('No Verb after \';\'');
+			}
+		}
+		else {
+			this.error('No ObjectList after Verb');
+		}
+		this.inform('Match PropertyListNotEmpty');
+		return true;
+	}
+	return false;
 }
 
 // Verb ::= VarOrIri | 'a'
@@ -741,6 +769,7 @@ tokenizer.matchObject = function () {
 // TriplesSameSubjectPath ::= VarOrTerm PropertyListPathNotEmpty | TriplesNodePath PropertyListPath
 tokenizer.matchTriplesSameSubjectPath = function () {
 	if (this.matchVarOrTerm()) {
+		this.nextToken();
 		if (this.matchPropertyListPathNotEmpty()) {
 			this.inform('Match TriplesSameSubjectPath');
 			return true;
@@ -749,6 +778,7 @@ tokenizer.matchTriplesSameSubjectPath = function () {
 		return false;
 	}
 	else if (this.matchTriplesNodePath()) {
+		this.nextToken();
 		if (this.matchPropertyListPath()) {
 			this.inform('Match TriplesSameSubjectPath');
 			return true;
@@ -768,7 +798,24 @@ tokenizer.matchPropertyListPath = function () {
 
 // PropertyListPathNotEmpty ::= ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
 tokenizer.matchPropertyListPathNotEmpty = function () {
-	//TO-DO
+	if (this.matchVerbPath() || this.matchVerbSimple) {
+		this.nextToken();
+	}
+	if (this.matchObjectListPath()) {
+		var token = this.nextToken();
+		while (token == ';') {
+			this.nextToken()
+			if (this.matchVerbPath() || this.matchVerbSimple) {
+				this.nextToken();
+			}
+			if  (this.matchObjectPath()) {
+				this.nextToken();
+			}
+		}
+		this.inform('Match PropertyListPathNotEmpty');
+		return true;
+	}
+	return false;
 }
 
 // VerbPath ::= Path
@@ -811,6 +858,7 @@ tokenizer.matchPath = function () {
 // PathAlternative ::= PathSequence ( '|' PathSequence )*
 tokenizer.matchPathAlternative = function () {
 	//TO-DO
+	return true;
 }
 
 // PathSequence ::= PathEltOrInverse ( '/' PathEltOrInverse )*
