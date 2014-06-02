@@ -10,5 +10,5 @@
 		"?species":"<urn:cite:botcar:species> botcar:possesses ?species",
 		"?families":"<urn:cite:botcar:family> botcar:possesses ?families"
 	},
-	"plugins":["sparqplug-in-text","sparqplug-out-json"]
+	"plugins":["sparqplug-in-text","sparqplug-out-json","sparqplug-in-botcar-taxonomy"]
 }

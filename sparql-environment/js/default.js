@@ -165,11 +165,6 @@ environment.loadDataset = function (dataset) {
 
 environment.loadPlugin = function (plugin) { // sparqplug.in.objectbased
 	console.log('Loading SparqPlug: '+plugin);
-		
-	/*var css = document.createElement('script');
-	css.setAttribute("type","text/javascript");
-	css.setAttribute("src", 'plugins/'+plugin.replace(/\-/g,'.')+'.css');	
-	document.getElementsByTagName("head")[0].appendChild(css);*/
 	
 	$.getScript('plugins/'+plugin.replace(/\-/g,'.')+'.js', function( data, textStatus, jqxhr ) {
 		console.log('Loaded JS for Plugin: '+plugin);
