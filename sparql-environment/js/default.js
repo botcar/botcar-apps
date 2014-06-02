@@ -283,3 +283,42 @@ environment.clearHistory = function () {
 	this.loadHistory();
 }
 
+// Minimizing
+
+environment.equalizeInputsOutputs = function () {
+	$('#menu-window').children().removeClass('selected');
+	$('#window-equal').addClass('selected');
+	
+	$('#'+this.currentOutPlugin+"-tab").addClass('selected');
+	$('#data-input').css('height','50%');
+	$('#data-input').css('border-bottom','1px solid #999');
+	$('#data-output').css('height','50%');
+	$('#'+this.currentInPlugin+"-tab").addClass('selected');
+	$('#data-input').css('height','50%');
+	$('#data-input').css('border-bottom','1px solid #999');
+	$('#data-output').css('height','50%');
+}
+
+environment.maximizeOutputs = function () {
+	$('#menu-window').children().removeClass('selected');
+	$('#window-output').addClass('selected');
+	
+	$('#data-input .panel-menu-tabs').children().removeClass('selected');
+	$('#'+this.currentOutPlugin+"-tab").addClass('selected');
+	$('#data-input').css('height','25px');
+	$('#data-input').css('border-bottom','0px');
+	$('#data-output').css('height','calc(100% - 25px)');
+}
+
+environment.maximizeInputs = function () {
+	$('#menu-window').children().removeClass('selected');
+	$('#window-input').addClass('selected');
+	
+	$('#data-output .panel-menu-tabs').children().removeClass('selected');
+	$('#'+this.currentInPlugin+"-tab").addClass('selected');
+	$('#data-output').css('height','25px');
+	$('#data-output').css('border-bottom','0px');
+	$('#data-input').css('border-bottom','1px solid #999');
+	$('#data-input').css('height','calc(100% - 25px)');
+}
+

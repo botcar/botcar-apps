@@ -1,0 +1,13 @@
+
+{
+	"name":"Homer",
+	"description":"Homer Multitext Project Dataset",
+	"source":"http://beta.hpcc.uh.edu:3030/ds/",
+	"prefixes":{
+		"cts:":"http://www.homermultitext.org/cts/rdf/",
+		"cite:":"http://www.homermultitext.org/cite/rdf/"
+	},
+	"variables":{
+	},
+	"plugins":["sparqplug-in-text","sparqplug-out-json"]
+}

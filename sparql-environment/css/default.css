@@ -36,6 +36,36 @@ a:hover {
 	text-align: center;
 }
 
+#menu-window {
+	float: right;
+	border: 1px solid #CCC;
+	border-radius: 5px;
+	position: fixed;
+	top: 6px;
+	right: 6px;
+	background:#EEE;
+	overflow:hidden;
+}
+
+#menu-window a {
+	border-right:1px solid #CCC;
+	height: 17px;
+	float: left;
+	padding: 2px;
+	color:#555;
+}
+#menu-window a:hover {
+	color:#333;
+}
+
+#menu-window .selected {
+	background:#CCC;
+}
+
+#menu-window a:last-child {
+	border-right:0px;
+}
+
 #workspace {
 	width:100%;
 	height: calc( 100% - 37px );
@@ -244,8 +274,18 @@ a:hover {
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'EnvironmentIcons';
+  src: url('icomoon.eot');
+  src: url('icomoon.eot') format('embedded-opentype'),
+  url('icomoon.woff') format('woff'),
+  url('icomoon.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .icons {
-	font-family: FontAwesome;
+	font-family: FontAwesome, EnvironmentIcons;
 	font-weight: normal;
 	font-size: 16px;
 }
