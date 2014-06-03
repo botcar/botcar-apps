@@ -10,7 +10,7 @@ sparqplug.out.json.updateUI = function () {
 
 plugins['sparqplug-out-json'] = sparqplug.out.json;
 
-//JSONView Plugin By: 
+//JSONView Plugin By:  
 (function(jQuery) {
   var $, Collapser, JSONFormatter, JSONView;
   JSONFormatter = (function() {

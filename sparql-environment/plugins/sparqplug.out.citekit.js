@@ -12,7 +12,6 @@ sparqplug.out.citekit.updateUI = function () {
 			blockquote = $('<blockquote/>',{cite:value.o.value,class:'cite-image'});
 			$(blockquote).ckLoadBlockquote();
 			$("#sparqplug-out-citekit").append(blockquote);
-			
 		}
 	});
 }
