@@ -7,12 +7,14 @@ sparqplug.out.citekit.load = function () {
 sparqplug.out.citekit.updateUI = function () {
 	$("#sparqplug-out-citekit").children().remove();
 	$.each(environment.latestResults, function (index, value) {
-		if (value.o.type == "uri") {
-			//$(this).append('<blockquote class="' + csvData[0][0] + '" cite="' + csvData[0][1] + '">' + csvData[0][1] + '</blockquote>');
-			blockquote = $('<blockquote/>',{cite:value.o.value,class:'cite-image'});
-			$(blockquote).ckLoadBlockquote();
-			$("#sparqplug-out-citekit").append(blockquote);
-		}
+		$.each(value, function (index, value) {
+			if (value.type == "uri") {
+				//$(this).append('<blockquote class="' + csvData[0][0] + '" cite="' + csvData[0][1] + '">' + csvData[0][1] + '</blockquote>');
+				blockquote = $('<blockquote/>',{cite:value.value,class:'cite-image'});
+				$(blockquote).ckLoadBlockquote();
+				$("#sparqplug-out-citekit").append(blockquote);
+			}
+		});
 	});
 }
 

@@ -3,11 +3,13 @@ sparqplug.in.text = {type:"in","title":"Text Query","description":"Standard SPAR
 sparqplug.in.text.load = function () {
 	var textarea = $('<textarea />',{
 		id: 'sp-in-text-textarea'
-	}).change(sparqplug.in.text.queryChanged);
+	});//.change(sparqplug.in.text.queryChanged);
+	
+	
 	
 	$("#sparqplug-in-text").append(textarea);
 	
-	var elements = {"SELECT":{'complete-before':'SELECT ','complete-after':''},"LIMIT":{'complete-before':'LIMIT ','complete-after':''},"WHERE":{'complete-before':'WHERE { \n  ','complete-after':'\n}'}}
+	var elements = {"SELECT":{'complete-before':'SELECT ','complete-after':'','class':'kw-main'},"LIMIT":{'complete-before':'LIMIT ','complete-after':'','class':'kw-main'},"WHERE":{'complete-before':'WHERE { \n  ','complete-after':'\n}','class':'kw-main'}}
 	var terms = ["BASE","SELECT","ORDER BY","FROM","GRAPH","STR","isURI","PREFIX","CONSTRUCT","LIMIT","FROM NAMED","OPTIONAL","LANG","isIRI","DESCRIBE","OFFSET","WHERE","UNION","LANGMATCHES","isLITERAL","ASK","DISTINCT","FILTER","DATATYPE","REGEX","REDUCED","a","BOUND","true","sameTERM","false"];
 	
 	var variables = ["?subject","?verb","?object"];
@@ -39,12 +41,40 @@ sparqplug.in.text.load = function () {
 	        },
 	        index: 1,
 	        replace: function (element) {
+				$('#sp-in-text-textarea').overlay().data('overlay').addTermAndColor(element,'verb');
 				return element + " ";
 	        },
 			 header: "Variables"
 		}
 	]);
+	$.each(variables, function(index, value) {
+		$('#sp-in-text-textarea').overlay().data('overlay').addTermAndColor(value,'verb');
+	});
+	$.each(elements, function(key, value) {
+		$('#sp-in-text-textarea').overlay().data('overlay').addTermAndColor(key,value.class);
+	});
+	//$('#sp-in-text-textarea').overlay().data('overlay').addTermAndColor('SELECT','kw-main').addTermAndColor('WHERE','kw-main').addTermAndColor('LIMIT','kw-main').addTermAndColor('DISTINCT','kw-submain');
+	$('#sp-in-text-textarea').data('alting',false);
+	$('#sp-in-text-textarea').keydown(function(e) {
+		console.log('keydown : '+e.keyCode);
+		if (e.keyCode == 18) {
+			$(this).data('alting',true);
+		} else if ($(this).data('alting') == true && e.keyCode == 13) {
+			sparqplug.in.text.queryChanged();
+		}
+	});
+	$('#sp-in-text-textarea').keyup(function(e) {
+		if (e.keyCode == 18) {
+			$(this).data('alting',false);
+		}
+	});
 	
+	var run_button = $('<a />',{
+		id: 'sp-in-text-run',
+		class:'icons'
+	}).append("&#xf04b;").click(function () {sparqplug.in.text.queryChanged()});
+	
+	$('#sp-in-text-textarea').parent().append(run_button);
 }
 
 sparqplug.in.text.error = function (error) {
@@ -54,18 +84,274 @@ sparqplug.in.text.error = function (error) {
 sparqplug.in.text.updateUI = function () {
 	console.log("updateUI in.text");
 	$('#sp-in-text-textarea').val(environment.latestQuery);
+	$('#sp-in-text-textarea').trigger('change');
 }
 
 //Plugin Specific
 
 sparqplug.in.text.queryChanged = function () {
-	var query = this.value;
+	var query = $('#sp-in-text-textarea').val();
 	environment.performQuery(query);
-	
 }
 
 plugins['sparqplug-in-text'] = sparqplug.in.text;
+/*!
+ * jQuery.textoverlay.js
+ *
+ * Repository: https://github.com/yuku-t/jquery-textoverlay
+ * License:    MIT
+ * Author:     Yuku Takahashi
+ */
 
+;(function ($) {
+
+  'use strict';
+
+  /**
+   * Get the styles of any element from property names.
+   */
+  var getStyles = (function () {
+    var color;
+    color = $('<div></div>').css(['color']).color;
+    if (typeof color !== 'undefined') {
+      return function ($el, properties) {
+        return $el.css(properties);
+      };
+    } else {  // for jQuery 1.8 or below
+      return function ($el, properties) {
+        var styles;
+        styles = {};
+        $.each(properties, function (i, property) {
+          styles[property] = $el.css(property);
+        });
+        return styles
+      };
+    }
+  })();
+
+  var entityMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '/': '&#x2F;'
+  }
+
+  var entityRegexe = /[&<>"'\/]/g
+
+  /**
+   * Function for escaping strings to HTML interpolation.
+   */
+  var escape = function (str) {
+    return str.replace(entityRegexe, function (match) {
+      return entityMap[match];
+    })
+  };
+
+  /**
+   * Determine if the array contains a given value.
+   */
+  var include = function (array, value) {
+    var i, l;
+    if (array.indexOf) return array.indexOf(value) != -1;
+    for (i = 0, l = array.length; i < l; i++) {
+      if (array[i] === value) return true;
+    }
+    return false;
+  };
+
+  var Overlay = (function () {
+
+    var html, css, textareaToWrapper, textareaToOverlay, allowedProps, termsAndColors;
+
+    html = {
+      wrapper: '<div class="textoverlay-wrapper"></div>',
+      overlay: '<div class="textoverlay"></div>'
+    };
+
+    css = {
+      wrapper: {
+        
+      },
+      overlay: {
+        
+      },
+      textarea: {
+        
+      }
+    };
+	
+    // CSS properties transport from textarea to wrapper
+    textareaToWrapper = [];
+    // CSS properties transport from textarea to overlay
+    textareaToOverlay = [
+    ];
+
+    function Overlay($textarea) {
+      var $wrapper, position;
+
+      // Setup wrapper element
+      position = $textarea.css('position');
+      if (position === 'static') position = 'relative';
+      $wrapper = $(html.wrapper);
+
+      // Setup overlay
+      this.textareaTop = parseInt($textarea.css('border-top-width'));
+      this.$el = $(html.overlay);
+
+      // Setup textarea
+      this.$textarea = $textarea.css(css.textarea);
+
+      // Render wrapper and overlay
+      this.$textarea.wrap($wrapper).after(this.$el);
+
+      // Intercept val method
+      // Note that jQuery.fn.val does not trigger any event.
+      this.$textarea.origVal = $textarea.val;
+      this.$textarea.val = $.proxy(this.val, this);
+
+      // Bind event handlers
+      this.$textarea.on({
+        'input.overlay':  $.proxy(this.onInput,       this),
+        'change.overlay': $.proxy(this.onInput,       this),
+        'scroll.overlay': $.proxy(this.resizeOverlay, this),
+        'resize.overlay': $.proxy(this.resizeOverlay, this)
+      });
+
+      this.strategies = [];
+	  
+	  this.termsAndColors = {};
+
+    }
+
+    $.extend(Overlay.prototype, {
+      val: function (value) {
+        return value == null ? this.$textarea.origVal() : this.setVal(value);
+      },
+
+      setVal: function (value) {
+        this.$textarea.origVal(value);
+        this.renderTextOnOverlay();
+        return this.$textarea;
+      },
+
+      onInput: function (e) {
+        this.renderTextOnOverlay();
+      },
+
+      renderTextOnOverlay: function () {
+        var text, i, l, strategy, match, style;
+        text = escape(this.$textarea.val());
+		
+		$.each(this.termsAndColors, function (term, color) {
+			console.log('Change: '+term+' '+color);
+			var match;
+			if (term.indexOf('?') == 0) {
+				 match = new RegExp('(\\'+term+')','g');
+			} else {
+				 match = new RegExp('('+term+')','g');
+			}
+			text = text.replace(match,"<span class='"+color+"'>"+term+"</span>");
+		});
+		
+        // Apply all strategies
+        /*for (i = 0, l = this.strategies.length; i < l; i++) {
+          strategy = this.strategies[i];
+          match = strategy.match;
+          if ($.isArray(match)) {
+            match = $.map(match, function (str) {
+              return str.replace(/(\(|\)|\|)/g, '\$1');
+            });
+            match = new RegExp('(' + match.join('|') + ')', 'g');
+          }
+
+          text = text.replace(match, function (str) {
+            return '<span class="'+ strategy.class+'">' + str + '</span>';
+          });
+        }*/
+        this.$el.html(text);
+        return this;
+      },
+
+      resizeOverlay: function () {
+        this.$el.css({ top: this.textareaTop - this.$textarea.scrollTop() });
+      },
+
+      register: function (strategies) {
+        strategies = $.isArray(strategies) ? strategies : [strategies];
+        this.strategies = this.strategies.concat(strategies);
+        return this.renderTextOnOverlay();
+      },
+	  
+	  addTermAndColor: function (term, color) {
+		  if (color == "verb") {
+			  if (!this.termsAndColors[term]) {
+				  //verb set color
+				  var verb_num = 0;
+				  
+				  while (this.containsColor(color + "-" +verb_num) == true) {
+					  verb_num++;
+				  }
+				  console.log('Add '+term+" withColor "+color+"-"+verb_num);
+				  color = color + "-" + verb_num;
+		  		} else {
+		  			return this;
+		  		}
+		  }
+		  this.termsAndColors[term] = color;
+		  return this;
+	  },
+	  
+	  containsColor: function (color_final) {
+		  var contained = false;
+		  $.each(this.termsAndColors,function (term, color) {
+		  					  if (color == color_final) {
+		  						  contained = true;
+		  					  }
+		  				  });
+						  
+						  return contained;
+	  } ,
+
+      destroy: function () {
+        var $wrapper;
+        this.$textarea.off('.overlay');
+        $wrapper = this.$textarea.parent();
+        $wrapper.after(this.$textarea).remove();
+        this.$textarea.data('overlay', void 0);
+        this.$textarea = null;
+      }
+    });
+
+    return Overlay;
+
+  })();
+
+  $.fn.overlay = function (strategies) {
+    var dataKey;
+    dataKey = 'overlay';
+
+    if (strategies === 'destroy') {
+      return this.each(function () {
+        var overlay = $(this).data(dataKey);
+        if (overlay) { overlay.destroy(); }
+      });
+    }
+
+    return this.each(function () {
+      var $this, overlay;
+      $this = $(this);
+      overlay = $this.data(dataKey);
+      if (!overlay) {
+        overlay = new Overlay($this);
+        $this.data(dataKey, overlay);
+      }
+      overlay.register(strategies);
+    });
+  };
+
+})(window.jQuery);
 /*!
  * jQuery.textcomplete.js
  *
@@ -361,8 +647,9 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
           this.el.selectionStart = this.el.selectionEnd = pre.length; 
         }
 
-        //this.$el.trigger('change')
-                this.$el.trigger('textComplete:select', value);
+        this.$el.trigger('change');
+         
+		 this.$el.trigger('textComplete:select', value);
         this.el.focus();
       },
 

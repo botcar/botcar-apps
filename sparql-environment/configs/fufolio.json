@@ -7,6 +7,11 @@
 		"cite:":"http://www.homermultitext.org/cite/rdf/"
 	},
 	"variables":{
+		"?folio":{
+			
+		},"?image":{
+			
+		}
 	},
 	"plugins":["sparqplug-in-text","sparqplug-out-json","sparqplug-out-citekit"]
 }
