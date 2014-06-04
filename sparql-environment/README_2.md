@@ -14,8 +14,6 @@
 
 ## SparqPlugs
 
-*Plugins made to 
-
 ### In
 
 Plugin for taking user-input and generating a query string.
