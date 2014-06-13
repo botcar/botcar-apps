@@ -13,5 +13,15 @@
 			
 		}
 	},
-	"plugins":["sparqplug-in-text","sparqplug-out-json","sparqplug-out-citekit"]
+	"cts":{
+		"types": {
+			"Editions":"cts:Edition",
+			"Collections":"cite:CiteCollection",
+			"Works":"cts:Work",
+			"Text Groups":"cts:TextGroup",
+			"Translations": "cts:Translation",
+			"Image Collections": "cite:ImageArchive"
+		}
+	},
+	"plugins":["sparqplug-in-text","sparqplug-out-json","sparqplug-out-citekit","sparqplug-in-cts-browser","sparqplug-out-table"]
 }

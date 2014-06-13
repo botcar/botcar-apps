@@ -1,4 +1,4 @@
-sparqplug.out.json = {type:"out","title":"JSON Viewer","description":"View results in a JSON tree.","icon":"&#xf040;","css":"sparqplug.out.json.css"};
+sparqplug.out.json = {type:"out","title":"JSON Viewer","description":"View results in a JSON tree.","icon":"&#xf121;","css":"sparqplug.out.json.css"};
 
 sparqplug.out.json.load = function () {
 

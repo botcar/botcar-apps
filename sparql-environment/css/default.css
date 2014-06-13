@@ -30,6 +30,7 @@ a:hover {
 	padding:8px;
 	border-bottom:1px solid #999;
 	font-size:16px;
+	position:fixed;
 }
 
 #menu-title {
@@ -70,6 +71,7 @@ a:hover {
 	width:100%;
 	height: calc( 100% - 37px );
 	position: fixed;
+	top:37px;
 }
 
 #datasets {
@@ -80,6 +82,7 @@ a:hover {
 	overflow: scroll;
 	z-index: 0;
 	background:#F3F5FA;
+	
 }
 
 #datasets-icon {
@@ -142,7 +145,7 @@ a:hover {
 }
 
 #inputs {
-	height: calc(100% - 25px);
+	height: calc(100% - 24px);
 	overflow:hidden;
 }
 
@@ -327,4 +330,26 @@ a:hover {
 #data-output-history ul {
 	margin:0px;
 	padding:0px;
+}
+/* Plugin default Elements */
+
+#data-area .plugin-column {
+	height: 100%;
+	overflow: scroll;
+	width: 30%;
+	border-right:1px solid #CCC;
+	float: left;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+#data-area .plugin-column li {
+	display: block;
+	font-size:12px;
+	padding-left: 4px;
+	cursor:pointer;
+}
+
+#data-area .plugin-column .selected {
+	background:#EEE;
 }

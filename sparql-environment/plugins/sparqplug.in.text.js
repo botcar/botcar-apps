@@ -9,8 +9,8 @@ sparqplug.in.text.load = function () {
 	
 	$("#sparqplug-in-text").append(textarea);
 	
-	var elements = {"SELECT":{'complete-before':'SELECT ','complete-after':'','class':'kw-main'},"LIMIT":{'complete-before':'LIMIT ','complete-after':'','class':'kw-main'},"WHERE":{'complete-before':'WHERE { \n  ','complete-after':'\n}','class':'kw-main'},"DISTINCT":{'class':'kw-submain','complete-before':'DISTINCT ','complete-after':''}}
-	var terms = ["BASE","SELECT","ORDER BY","FROM","GRAPH","STR","isURI","PREFIX","CONSTRUCT","LIMIT","FROM NAMED","OPTIONAL","LANG","isIRI","DESCRIBE","OFFSET","WHERE","UNION","LANGMATCHES","isLITERAL","ASK","DISTINCT","FILTER","DATATYPE","REGEX","REDUCED","a","BOUND","true","sameTERM","false"];
+	var elements = {"SELECT":{'complete-before':'SELECT ','complete-after':'','class':'kw-main'},"LIMIT":{'complete-before':'LIMIT ','complete-after':'','class':'kw-main'},"WHERE":{'complete-before':'WHERE { \n  ','complete-after':'\n}','class':'kw-main'},"DISTINCT":{'class':'kw-submain','complete-before':'DISTINCT ','complete-after':''},"FILTER":{'complete-before':'FILTER ( ','complete-after':' )','class':'kw-main'},"FILTER-REGEX":{'complete-before':'FILTER regex( ','complete-after':' )','class':'kw-main'}}
+	var terms = ["BASE","SELECT","ORDER BY","FROM","GRAPH","STR","isURI","PREFIX","CONSTRUCT","LIMIT","FROM NAMED","OPTIONAL","LANG","isIRI","DESCRIBE","OFFSET","WHERE","UNION","LANGMATCHES","isLITERAL","ASK","DISTINCT","FILTER","FILTER-REGEX","DATATYPE","REGEX","REDUCED","a","BOUND","true","sameTERM","false"];
 	
 	var variables = ["?subject","?verb","?object"];
 	$('#sp-in-text-textarea').textcomplete([
@@ -78,6 +78,8 @@ sparqplug.in.text.load = function () {
 	}).append("&#xf04b;").click(function () {sparqplug.in.text.queryChanged()});
 	
 	$('#sp-in-text-textarea').parent().append(run_button);
+	
+	//self.loadDetailView();
 }
 
 sparqplug.in.text.error = function (error) {
@@ -95,6 +97,21 @@ sparqplug.in.text.updateUI = function () {
 sparqplug.in.text.queryChanged = function () {
 	var query = $('#sp-in-text-textarea').val();
 	environment.performQuery(query);
+}
+
+sparqplug.in.text.loadDetailView = function () {
+	/*$('#detail.content').empty();
+	var verb_search = $('<input/>',{
+		type:'text'
+	}).change(function () {
+		var urn = $(this).val();
+		
+		environment.silentQuery("SELECT distinct ?v WHERE { <"+urn+"> ?v ?o }")
+		
+		$('#detail-verb-search-results').append();
+	})
+	
+	$('#detail.content').append(verb_search);*/
 }
 
 plugins['sparqplug-in-text'] = sparqplug.in.text;

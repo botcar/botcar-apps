@@ -235,6 +235,16 @@ environment.performQuery = function (query) {
 	plugins[this.currentOutPlugin].updateUI();
 }
 
+environment.silentQuery = function (query) {
+	console.log('Query: '+query);
+	var results = $(document).query(query,this.config[environment.currentDataset]);
+	if (results.error) {
+		plugins[this.currentInPlugin].error(results.response);
+		return;
+	}
+	return results;
+}
+
 //History
 
 environment.addToHistory = function (query) {
