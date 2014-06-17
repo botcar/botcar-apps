@@ -145,7 +145,8 @@ sparqplug.in.ctsbrowser.selectedCollection = function (collection_URN) {
 sparqplug.in.ctsbrowser.searchCollections = function () {
 	var searchTerm = $('#cts-browser-collections-searchbar').val();
 	
-	$('#cts-browser-collections li').each(function (index, element) {
+	$('#cts-browser-collections > ul > li > ul > li').each(function (index, element) {
+		console.log(element);
 	 	var spans = $(element).children();
 		var li_searchable_text = spans[0].innerHTML;
 		if (li_searchable_text.indexOf(searchTerm) == -1) {

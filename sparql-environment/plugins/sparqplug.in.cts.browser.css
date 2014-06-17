@@ -107,7 +107,8 @@
 	font-size: 16px;
 	padding-top:3px;
 	padding-bottom:3px;
-	background:#EEE;
+	background:#FFF;
+	border-bottom: 1px solid #CCC;s
 }
 
 /* Sticky List */

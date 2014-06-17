@@ -98,6 +98,15 @@ a:hover {
 #datasets .panel-list li {
 	cursor: pointer;
 }
+
+#datasets .panel-list li .edit {
+	float:right;
+	font-size:12px;
+	font-weight:bold;
+	opacity:0.5;
+	margin-right:5px;
+}
+
 #datasets .panel-list .selected {
 	background:#CCC;
 }
@@ -109,6 +118,7 @@ a:hover {
 	border-radius: 5px;
 	font-size: 16px;
 }
+
 #import-config-file-hide {
 	float: right;
 	font-weight: bold;
@@ -116,6 +126,19 @@ a:hover {
 	opacity: .25;
 	margin-top: -2px;
 	
+}
+
+#config-editor {
+	position: absolute;
+	background: #FFF;
+	border: 1px solid #CCC;
+	border-radius: 5px;
+	top:100%; /* 10% when open */
+	height: 0%; /* 60% when open */
+	left: 28%;
+	width: 40%;
+	padding: 2%;
+	display: none; /* remove this when editing is actually working. This is a hack to make sure it's functional. */
 }
 
 .panel-list li {

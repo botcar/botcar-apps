@@ -119,11 +119,20 @@ environment.displayConfigs = function () {
 	$("#datasets .panel-list ul").empty();
 	$.each(this.config,function(index,value) {
 		console.log('config: '+value.name);
+		
+		li_edit = $('<span/>',{
+			class:'edit',
+			text:'edit'
+		}).click(function () {
+			dataset = $(this).parent().data('id');
+			alert('edit dataset: '+dataset);		
+		}).hide();
+		
 		li = $('<li/>',{
 			text:value.name,
 			title:value.description
-		}).click(function () {
-			dataset = this.innerHTML;
+		}).data('id',value.name).click(function () {
+			dataset = $(this).data('id');
 			console.log("load dataset: "+dataset);
 			environment.currentDataset = dataset;
 			$('#datasets .panel-list li').removeClass('selected');
@@ -131,7 +140,12 @@ environment.displayConfigs = function () {
 			environment.save();
 			
 			environment.loadDataset(dataset);
-		});
+		}).hover(function () {
+			$(this).find('.edit').show();
+		},function () {
+			$(this).find('.edit').hide();
+		}).append(li_edit);
+				
 		if (environment.currentDataset == value.name) {
 			li.addClass('selected');
 		}
@@ -158,8 +172,11 @@ environment.loadDataset = function (dataset) {
 	$.each(environment.config[dataset].plugins,function (index,value) {
 		environment.loadPlugin(value);
 	});	
-
+		
 	this.loadHistory();
+}
+
+environment.editDataset = function (dataset) {
 	
 }
 
