@@ -192,6 +192,11 @@ a:hover {
 	float: left;
 }
 
+#data-output-history ul {
+	height: calc(100% - 25px);
+	overflow: scroll;
+}
+
 #data-output-results {
 	width: 75%;
 	float: right;
