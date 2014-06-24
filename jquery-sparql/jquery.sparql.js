@@ -9,7 +9,7 @@
 		var json_string = $.ajax(
 		        {
 		           url: $.fn.defaults.source+"query", 
-				   data: {"query":query},
+				   data: {"query":query,"output":"json"},
 				   type: "GET",
 		           async: false, 
 		           dataType: 'json'
