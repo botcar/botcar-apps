@@ -2,6 +2,7 @@
 	"name":"botcar",
 	"description":"Botanical specimen information from Lorde and Catesby's trips to SC",
 	"source":"http://localhost:3030/ds/",
+	"citekitSRC":"svc-folio-cts",
 	"prefixes":{
 		"cts:":"http://www.homermultitext.org/cts/rdf/",
 		"cite:":"http://www.homermultitext.org/cite/rdf/"

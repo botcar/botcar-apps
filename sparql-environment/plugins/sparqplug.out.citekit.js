@@ -10,7 +10,7 @@ sparqplug.out.citekit.updateUI = function () {
 		$.each(value, function (index, value) {
 			if (value.type == "uri") {
 				//$(this).append('<blockquote class="' + csvData[0][0] + '" cite="' + csvData[0][1] + '">' + csvData[0][1] + '</blockquote>');
-				blockquote = $('<blockquote/>',{cite:value.value,class:'cite-image'});
+				blockquote = $('<blockquote/>',{cite:value.value,class:'cite-image ' + (environment.config[environment.currentDataset].citekitSRC)});
 				$(blockquote).ckLoadBlockquote();
 				$("#sparqplug-out-citekit").append(blockquote);
 			}

@@ -479,10 +479,10 @@
 				"image-w":"500"
 			},
 			"svc-beta-cts":{//Beta Server in Houston: citeservlet 
-				"cite-text":"http://beta.hpcc.uh.edu/tomcat/hmtcite/texts",
-				"cite-img":"http://beta.hpcc.uh.edu/tomcat/hmtcite/images",
-				"cite-collection":"http://beta.hpcc.uh.edu/tomcat/hmtcite/collections",
-				"image-w":"400"
+				"cite-text":"http://beta.hpcc.uh.edu/tomcat/hmtdigital/texts",
+				"cite-img":"http://beta.hpcc.uh.edu/tomcat/hmtdigital/images",
+				"cite-collection":"http://beta.hpcc.uh.edu/tomcat/hmtdigital/collections",
+				"image-w":"500"
 			}
 		},	
 		"classNames":{
