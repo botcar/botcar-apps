@@ -19,5 +19,5 @@
 			"Image Collections": "cite:ImageArchive"
 		}
 	},
-	"plugins":["sparqplug-in-text","sparqplug-out-json","sparqplug-out-citekit","sparqplug-in-cts-browser","sparqplug-out-table"]
+	"plugins":["sparqplug-in-text","sparqplug-out-json","sparqplug-out-citekit","sparqplug-in-cts-browser","sparqplug-out-table","sparqplug-in-hmt-names"]
 }

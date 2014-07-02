@@ -1,0 +1,17 @@
+.hmt-names-column {
+	height: 100%;
+	overflow: scroll;
+	width: 30%;
+	border-right:1px solid #CCC;
+	float: left;
+}
+
+.hmt-names-column li {
+	display: block;
+	font-size:12px;
+	padding-left: 4px;
+}
+
+.hmt-names-column .selected {
+	background:#EEE;
+}
