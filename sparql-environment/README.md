@@ -57,17 +57,15 @@ Browse the taxonomy tree in the botcar dataset.
 
 ## Getting Started
 
-The important thing to remember with the SPARQL Environment is that everything is run client side with certain scripts being loaded from various online resources.
+The important thing to remember when using the SPARQL Environment is that everything is running client side with certain scripts being loaded from various online resources.
 
 1. Clone the repository.
 
 2. Define a config file or choose an existing one.
 
-Give your dataset a name, description and source. Include any prefixes that are helpful for querying your data. Define the plugins that you want to be included. There are several example config files included in the repository. fufolio.json should work on any system.
+Give your dataset a name, description and source. Include any prefixes that are helpful for querying your data. Define the plugins that you want to be included. There are several example config files included in the repository. *fufolio.json* should work on any system.
 
-3. Open the index.html file from the sparql-environment root directory in a browser.
-
-While the SPARQL Environment runs locally currently many javascript libraries are imported from the internet.
+3. Open the *index.html* file from the sparql-environment root directory in a browser.
 
 4. Click import configuration from the right datasets panel and drag the configuration file onto the file dropzone area.
 

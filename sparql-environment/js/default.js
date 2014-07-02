@@ -101,14 +101,15 @@ environment.importConfigJSON = function (json) {
 	this.save();
 	
 	this.displayConfigs();
+	this.loadDataset(this.currentDataset);
 }
 
 environment.importConfigFromURL = function (url) {
 	console.log('importing config from URL: '+url)
 	json = $.getJSON( url ,function( data ) {
-		environment.importConfigJSON(data);
-		console.log('recieved data from config URL');
-		$('#datasets .panel-list li').append("<li>"+data.name+"</li>");
+		if (environment.config[data.name] == null) {
+			environment.importConfigJSON(JSON.stringify(data));
+		}
 	});
 }
 
@@ -174,6 +175,16 @@ environment.loadDataset = function (dataset) {
 	});	
 		
 	this.loadHistory();
+}
+
+
+environment.loadStandAloneDataset = function (configURL) {
+	this.importConfigFromURL(configURL);
+	$('<link/>', {
+	   rel: 'stylesheet',
+	   type: 'text/css',
+	   href: 'css/standalone.css'
+	}).appendTo('head');
 }
 
 environment.editDataset = function (dataset) {
