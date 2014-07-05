@@ -1,4 +1,5 @@
 $(document).ready(function (){
+	
 	environment.load();
 	environment.displayConfigs();
 	if (environment.currentDataset != null && environment.currentDataset != "") {
@@ -26,7 +27,43 @@ $(document).ready(function (){
 		}
 	});
 	
+	// The plugin sets the $.support.fullscreen flag:
+	if($.support.fullscreen){
+
+	    // ...
+	    // Show your full screen button here
+	    // ...
+
+	    $('#fullScreen').click(function(e){
+
+	        $('body').fullScreen();
+
+	        // You can also pass a hash with properties:
+	        // $('#content').fullScreen({
+	        //  'background'    : '#111',
+	        //  'callback'      : function(isFullScreen){
+	        //      // ...
+	        //      // Do some cleaning up here
+	        //      // ...
+	        //  }
+	        // });
+	    });
+	}
 });
+
+function requestFullScreen(element) {
+    // Supports most browsers and their versions.
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+
+    if (requestMethod) { // Native full screen.
+        requestMethod.call(element);
+    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+        var wscript = new ActiveXObject("WScript.Shell");
+        if (wscript !== null) {
+            wscript.SendKeys("{F11}");
+        }
+    }
+}
 
 function handleFileSelect(evt) {
     evt.stopPropagation();
