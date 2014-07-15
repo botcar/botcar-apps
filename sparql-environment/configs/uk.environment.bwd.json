@@ -1,0 +1,17 @@
+{
+	"name":"UK BWD",
+	"description":"UK Environment Bathing Water",
+	"source":"http://environment.data.gov.uk/sparql/bwq/",
+	"prefixes":{
+		"rdf:":"http://www.w3.org/2000/01/rdf-schema#",
+		"bwq:":"http://environment.data.gov.uk/def/bathing-water-quality/"
+	},
+	"variables":{
+		"?folio":{
+			
+		},"?image":{
+			
+		}
+	},
+	"plugins":["sparqplug-in-text","sparqplug-out-json","sparqplug-out-table"]
+}
