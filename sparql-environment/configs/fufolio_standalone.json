@@ -1,7 +1,8 @@
 {
 	"name":"fufolio",
-	"description":"An example of a stand alone dataset. Essentially the same.",
+	"description":"Furman University Classics Dataset",
 	"source":"http://folio.furman.edu/fuseki/folio/",
+	"citekitSRC":"svc-folio-cts",
 	"prefixes":{
 		"cts:":"http://www.homermultitext.org/cts/rdf/",
 		"cite:":"http://www.homermultitext.org/cite/rdf/"
