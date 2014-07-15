@@ -5,24 +5,37 @@ sparqplug.in.text.load = function () {
 		id: 'sp-in-text-textarea'
 	});//.change(sparqplug.in.text.queryChanged);
 	
-	
-	
 	$("#sparqplug-in-text").append(textarea);
 	
 	var elements = {"SELECT":{'complete-before':'SELECT ','complete-after':'','class':'kw-main'},"LIMIT":{'complete-before':'LIMIT ','complete-after':'','class':'kw-main'},"WHERE":{'complete-before':'WHERE { \n  ','complete-after':'\n}','class':'kw-main'},"DISTINCT":{'class':'kw-submain','complete-before':'DISTINCT ','complete-after':''},"FILTER":{'complete-before':'FILTER ( ','complete-after':' )','class':'kw-main'},"FILTER-REGEX":{'complete-before':'FILTER regex( ','complete-after':' )','class':'kw-main'}}
 	var terms = ["BASE","SELECT","ORDER BY","FROM","GRAPH","STR","isURI","PREFIX","CONSTRUCT","LIMIT","FROM NAMED","OPTIONAL","LANG","isIRI","DESCRIBE","OFFSET","WHERE","UNION","LANGMATCHES","isLITERAL","ASK","DISTINCT","FILTER","FILTER-REGEX","DATATYPE","REGEX","REDUCED","a","BOUND","true","sameTERM","false"];
 	
 	var variables = ["?subject","?verb","?object"];
+	var prefixes = Object.keys(environment.currentConfig.prefixes);
+	
 	$('#sp-in-text-textarea').textcomplete([
-	    { // html
+		{ // Prefixes
+	        match: /(?:^|\s)(\w+)$/im,
+	        search: function (term, callback) {
+	            callback($.map(prefixes, function (element) {
+	                return element.indexOf(term) === 0 ? element : null;
+	            }));
+	        },
+	        index: 0,
+	        replace: function (element) {
+				$('#sp-in-text-textarea').overlay().data('overlay').addTermAndColor(element,'prefix');
+				return element;
+	        },
+			 header: "Prefixes"
+		},
+	    { // Keywords
 	        match: /(?:^|\s)(\w+)$/im ,
-			match_replace: /(\w+)$/im ,
 	        search: function (term, callback) {
 	            callback($.map(terms, function (element) {
 	                return element.indexOf(term.toUpperCase()) === 0 ? element : null;
 	            }));
 	        },
-	        index: 1,
+	        index: 0,
 	        replace: function (element) {
 				if (elements[element]) {
 	            	return [elements[element]['complete-before'], elements[element]['complete-after']];
@@ -31,15 +44,14 @@ sparqplug.in.text.load = function () {
 				}
 	        },
 			 header: "Keywords"
-		},{ // html
+		},{ // Variables
 	        match: /(\?\w*)$/im ,
-			match_replace: /(\?\w*)$/im ,
 	        search: function (term, callback) {
 	            callback($.map(variables, function (element) {
 	                return element.indexOf(term) === 0 ? element : null;
 	            }));
 	        },
-	        index: 1,
+	        index: 0,
 	        replace: function (element) {
 				$('#sp-in-text-textarea').overlay().data('overlay').addTermAndColor(element,'verb');
 				return element + " ";
@@ -47,22 +59,22 @@ sparqplug.in.text.load = function () {
 			 header: "Variables"
 		}
 	]);
-	$.each(terms, function (index, value) {
-		//$('#sp-in-text-textarea').overlay().data('overlay').addTermAndColor(value,'kw-submain');
-	});
+	
 	$.each(variables, function(index, value) {
 		$('#sp-in-text-textarea').overlay().data('overlay').addTermAndColor(value,'verb');
+	});
+	$.each(prefixes, function(index, value) {
+		$('#sp-in-text-textarea').overlay().data('overlay').addTermAndColor(value,'prefix');
 	});
 	$.each(elements, function(key, value) {
 		$('#sp-in-text-textarea').overlay().data('overlay').addTermAndColor(key,value.class);
 	});
-	//$('#sp-in-text-textarea').overlay().data('overlay').addTermAndColor('SELECT','kw-main').addTermAndColor('WHERE','kw-main').addTermAndColor('LIMIT','kw-main').addTermAndColor('DISTINCT','kw-submain');
 	$('#sp-in-text-textarea').data('alting',false);
 	$('#sp-in-text-textarea').keydown(function(e) {
 		console.log('keydown : '+e.keyCode);
 		if (e.keyCode == 18) {
 			$(this).data('alting',true);
-		} else if ($(this).data('alting') == true && e.keyCode == 13) {
+		} else if ($(this).data('alting') == true && e.keyCode == 13) { //R?
 			sparqplug.in.text.queryChanged();
 		}
 	});
@@ -115,6 +127,7 @@ sparqplug.in.text.loadDetailView = function () {
 }
 
 plugins['sparqplug-in-text'] = sparqplug.in.text;
+
 /*!
  * jQuery.textoverlay.js
  *
@@ -201,7 +214,7 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
         
       }
     };
-	
+
     // CSS properties transport from textarea to wrapper
     textareaToWrapper = [];
     // CSS properties transport from textarea to overlay
@@ -240,7 +253,7 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
       });
 
       this.strategies = [];
-	  
+
 	  this.termsAndColors = {};
 
     }
@@ -263,7 +276,7 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
       renderTextOnOverlay: function () {
         var text, i, l, strategy, match, style;
         text = escape(this.$textarea.val());
-		
+
 		$.each(this.termsAndColors, function (term, color) {
 			console.log('Change: '+term+' '+color);
 			var match;
@@ -274,7 +287,7 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
 			}
 			text = text.replace(match,"<span class='"+color+"'>"+term+"</span>");
 		});
-		
+
         // Apply all strategies
         /*for (i = 0, l = this.strategies.length; i < l; i++) {
           strategy = this.strategies[i];
@@ -303,13 +316,13 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
         this.strategies = this.strategies.concat(strategies);
         return this.renderTextOnOverlay();
       },
-	  
+
 	  addTermAndColor: function (term, color) {
 		  if (color == "verb") {
 			  if (!this.termsAndColors[term]) {
 				  //verb set color
 				  var verb_num = 0;
-				  
+
 				  while (this.containsColor(color + "-" +verb_num) == true) {
 					  verb_num++;
 				  }
@@ -322,7 +335,7 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
 		  this.termsAndColors[term] = color;
 		  return this;
 	  },
-	  
+
 	  containsColor: function (color_final) {
 		  var contained = false;
 		  $.each(this.termsAndColors,function (term, color) {
@@ -330,7 +343,7 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
 		  						  contained = true;
 		  					  }
 		  				  });
-						  
+
 						  return contained;
 	  } ,
 
@@ -372,6 +385,7 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
   };
 
 })(window.jQuery);
+
 /*!
  * jQuery.textcomplete.js
  *
@@ -379,6 +393,9 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
  * License:     MIT
  * Author:      Yuku Takahashi
  */
+RegExp.escape = function(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
 
 ;(function ($) {
 
@@ -589,7 +606,6 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
           if (!keep) {
             // This is the last callback for this search.
             free();
-            self.clearAtNext = true;
           }
         };
       },
@@ -603,7 +619,7 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
 
         searchQuery = this.extractSearchQuery(this.getTextFromHeadToCaret());
         if (searchQuery.length) {
-          term = searchQuery[1];
+          term = searchQuery[0];
           if (this.term === term) return; // Ignore shift-key or something.
           this.term = term;
           this.search(searchQuery);
@@ -628,9 +644,11 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
             return true;
         }
       },
-
-      onSelect: function (value) {
-        var pre, post, newSubStr, sel, range, selection;
+	  
+      onSelect: function (data_obj) {
+        var pre, post, newSubStr, sel, range, selection, match, value;
+		value = data_obj['val'];
+		this.strategy = data_obj['strategy'];
         pre = this.getTextFromHeadToCaret();
 
         if (this.el.contentEditable == 'true') {
@@ -643,15 +661,22 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
         } else {
           post = this.el.value.substring(this.el.selectionEnd);
         }
-		
+        
         newSubStr = this.strategy.replace(value);
         
         if ($.isArray(newSubStr)) {
           post = newSubStr[1] + post;
           newSubStr = newSubStr[0];
         }
-        var match = pre.match(this.strategy.match);		
-        pre = pre.replace(this.strategy.match_replace, newSubStr);
+
+       	match = this.getMatch(pre, this.strategy.match, this.strategy.index);
+		
+		if (this.strategy.match_replace) {
+			pre = pre.replace(this.strategy.match_replace, newSubStr);
+		} else {
+			pre = pre.replace(new RegExp(RegExp.escape(match)+"$"), newSubStr);
+		}
+       
         
         if (this.el.contentEditable == 'true') {
           range.selectNodeContents(range.startContainer);
@@ -667,9 +692,8 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
           this.el.selectionStart = this.el.selectionEnd = pre.length; 
         }
 
-        this.$el.trigger('change');
-         
-		 this.$el.trigger('textComplete:select', value);
+        this.$el.trigger('change')
+                .trigger('textComplete:select', value);
         this.el.focus();
       },
 
@@ -794,19 +818,60 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
        */
       extractSearchQuery: function (text) {
         var i, l, strategy, match;
+		var strategies = [];
         for (i = 0, l = this.strategies.length; i < l; i++) {
           strategy = this.strategies[i];
-          match = text.match(strategy.match);
-          if (match) { return [strategy, match[strategy.index]]; }
-        }
-        return [];
+          match = this.getMatch(text, strategy.match, strategy.index);
+		  
+          if (match) {
+			  	strategies.push(match);
+		  		strategies.push(strategy);
+		  }
+		  
+	  	 }
+        return strategies; // 0 - term 1 - strategy... n - term n-1 - strategy
       },
+	  
+	  getMatch: function(string, regex, index) {
+		  if(!(regex instanceof RegExp)) {
+	          return "ERROR";
+	      }
+	      else {
+	          if (!regex.global) {
+	              // If global flag not set, create new one.
+	              var flags = "g";
+	              if (regex.ignoreCase) flags += "i";
+	              if (regex.multiline) flags += "m";
+	              if (regex.sticky) flags += "y";
+	              regex = RegExp(regex.source, flags);
+	          }
+	      }
+	      var matches = [];
+	      var match = regex.exec(string);
+	      while (match) {
+	          if (match.length > 2) {
+	              var group_matches = [];
+	              for (var i = 1; i < match.length; i++) {
+	                  group_matches.push(match[i]);
+	              }
+	              matches.push(group_matches);
+	          }
+	          else {
+	              matches.push(match[1]);
+	          }
+	          match = regex.exec(string);
+	      }
+	      return matches[index];
+	  },
 
       search: lock(function (free, searchQuery) {
-        var term;
-        this.strategy = searchQuery[0];
-        term = searchQuery[1];
-        this.strategy.search(term, this.searchCallbackFactory(free));
+			for (var i=0; i < searchQuery.length; i+=2) {
+				var term;
+				this.strategy = searchQuery[i+1];
+				term = searchQuery[i];
+				this.strategy.search(term, this.searchCallbackFactory(free));
+			}
+        	this.clearAtNext = true;
       })
     });
 
@@ -849,7 +914,7 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
           val = data[i];
           if (include(this.data, val)) continue;
           index = this.data.length;
-          this.data.push(val);
+          this.data.push({'val':val,'strategy':this.strategy});
           html += '<li class="textcomplete-item" data-index="' + index + '"><a>';
           html +=   this.strategy.template(val);
           html += '</a></li>';
@@ -1023,3 +1088,4 @@ plugins['sparqplug-in-text'] = sparqplug.in.text;
   };
 
 })(window.jQuery || window.Zepto);
+

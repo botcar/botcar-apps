@@ -5,7 +5,7 @@
 	 	   	var opts = $.extend( {}, $.fn.defaults, options);
 	        $.fn.defaults = opts;
 		}
-		query = $.fn.defaults.prefix + query;
+		query = this.prefixesAsString() + query;
 		var json_string = $.ajax(
 		        {
 		           url: $.fn.defaults.source+"query", 
@@ -45,6 +45,14 @@
 		return str;
 	}
 	
+	$.fn.prefixesAsString = function () {
+		var str = "";
+		$.each($.fn.defaults.prefixes, function (key, value) {
+			str += "prefix "+key+" <"+value+"> ";
+		});
+		return str;
+	}
+	
 //	$.fn.query.prefixString = function() {
 		
 //	}
@@ -53,22 +61,15 @@
 	$.fn.defaults = {
 		"source":"http://localhost:3030/ds/", //Defualt source to use out of the sources
 		"prefix":"prefix cts: <http://www.homermultitext.org/cts/rdf/> prefix cite: <http://www.homermultitext.org/cite/rdf/> prefix hmt: <http://www.homermultitext.org/hmt/rdf/> prefix citedata: <http://www.homermultitext.org/hmt/citedata/> prefix dcterms: <http://purl.org/dc/terms/> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix  xsd: <http://www.w3.org/2001/XMLSchema#> prefix olo: <http://purl.org/ontology/olo/core#>",
-		"prefixes":[
-		{'prefix':'cts:',
-		'value':'http://www.homermultitext.org/cts/rdf/'},
-		{'prefix':'cite:',
-		'value':'http://www.homermultitext.org/cite/rdf/'},
-		{'prefix':'hmt:',
-		'value':'http://www.homermultitext.org/hmt/rdf/'},
-		{'prefix':'citedata:',
-		'value':'http://www.homermultitext.org/hmt/citedata/'},
-		{'prefix':'dcterms:',
-		'value':'http://purl.org/dc/terms/'},
-		{'prefix':'rdf:',
-		'value':'http://www.w3.org/1999/02/22-rdf-syntax-ns#'},
-		{'prefix':'olo:',
-		'value':'http://purl.org/ontology/olo/core#'}
-		]
+		"prefixes":{
+			'cts:':'http://www.homermultitext.org/cts/rdf/',
+			'cite:': 'http://www.homermultitext.org/cite/rdf/',
+			'hmt:': 'http://www.homermultitext.org/hmt/rdf/',
+			'citedata:': 'http://www.homermultitext.org/hmt/citedata/',
+			'dcterms:':'http://purl.org/dc/terms/',
+			'rdf:':'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+			'olo:':'http://purl.org/ontology/olo/core#'
+		}
 	};
 	
 	

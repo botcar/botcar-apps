@@ -198,8 +198,8 @@ environment.displayConfigs = function () {
 
 environment.loadDataset = function (dataset) {
 	
-	environment.currentInPlugin = null;
-	environment.currentOutPlugin = null;
+	this.currentInPlugin = null;
+	this.currentOutPlugin = null;
 	
 	$('#inputs').children().remove();
 	$('#data-input .panel-menu-tabs').children().remove();
@@ -210,7 +210,8 @@ environment.loadDataset = function (dataset) {
 	$.each(environment.config[dataset].plugins,function (index,value) {
 		environment.loadPlugin(value);
 	});	
-		
+	
+	this.currentConfig = this.config[this.currentDataset];
 	this.loadHistory();
 }
 
@@ -287,7 +288,7 @@ environment.viewPlugin = function (plugin) {
 
 environment.performQuery = function (query) {
 	console.log('Query: '+query);
-	var results = $(document).query(query,this.config[environment.currentDataset]);
+	var results = $(document).query(query,this.config[this.currentDataset]);
 	if (results.error) {
 		plugins[this.currentInPlugin].error(results.response);
 		return;
