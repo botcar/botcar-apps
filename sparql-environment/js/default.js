@@ -29,7 +29,7 @@ $(document).ready(function (){
 	});
 	
 	
-	$('#datasets').data('open', true);
+	$('#datasets').data('open', false);
 	
 	$('#menu-datasets').click(function () {
 		if ($('#datasets').data('open')) {
