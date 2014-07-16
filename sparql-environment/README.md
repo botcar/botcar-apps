@@ -67,6 +67,15 @@ Give your dataset a name, description and source. Include any prefixes that are 
 
 3. Open the *index.html* file from the sparql-environment root directory in a browser.
 
+*Note for using Chrome:*
+Chrome does not allow ajax calls to access local file system files. You can very easily run a http server using python on your local machine. Change directory to your current location and run this command.
+
+````
+	 python -m SimpleHTTPServer
+````
+
+Then open Chrome and point to localhost:8000/
+
 4. Click import configuration from the right datasets panel and drag the configuration file onto the file dropzone area.
 
 Note: At this time once a configuration file is loaded it can't be removed without editing the local storage for the browser. Future updates should allow for deleting and editing configurations after they've been loaded.
