@@ -2,6 +2,7 @@ $(document).ready(function (){
 	
 	environment.load();
 	environment.displayConfigs();
+	environment.setupMinimizing();
 	if (environment.currentDataset != null && environment.currentDataset != "") {
 		environment.loadDataset(environment.currentDataset);
 	}	
@@ -25,6 +26,20 @@ $(document).ready(function (){
 				$("#import-config").remove();
 			});
 		}
+	});
+	
+	
+	$('#datasets').data('open', true);
+	
+	$('#menu-datasets').click(function () {
+		if ($('#datasets').data('open')) {
+			environment.hideDatasets();
+			$('#datasets').data('open', false);
+		} else {
+			environment.showDatasets();
+			$('#datasets').data('open', true);
+		}
+		
 	});
 	
 	// The plugin sets the $.support.fullscreen flag:
@@ -150,8 +165,6 @@ environment.importConfigFromURL = function (url) {
 	});
 }
 
-
-
 environment.displayConfigs = function () {
 	console.log('load configs: '+this.config);
 	$("#datasets .panel-list ul").empty();
@@ -163,7 +176,7 @@ environment.displayConfigs = function () {
 			text:'edit'
 		}).click(function () {
 			dataset = $(this).parent().data('id');
-			alert('edit dataset: '+dataset);		
+			environment.editDataset(dataset);
 		}).hide();
 		
 		li = $('<li/>',{
@@ -207,12 +220,20 @@ environment.loadDataset = function (dataset) {
 	$('#outputs').children().remove();
 	$('#data-output-results .panel-menu-tabs').children().remove();
 	
-	$.each(environment.config[dataset].plugins,function (index,value) {
-		environment.loadPlugin(value);
-	});	
+	$("#data-output-history ul").children().remove();
 	
-	this.currentConfig = this.config[this.currentDataset];
-	this.loadHistory();
+	if (dataset != "") {
+		$.each(environment.config[dataset].plugins,function (index,value) {
+			environment.loadPlugin(value);
+		});	
+	
+		this.currentConfig = this.config[this.currentDataset];
+		
+		this.loadHistory();
+		
+		$('#menu-datasets .name').html(this.currentDataset);
+	}
+	
 }
 
 
@@ -226,7 +247,95 @@ environment.loadStandAloneDataset = function (configURL) {
 }
 
 environment.editDataset = function (dataset) {
+	this.editor.open();
 	
+	edit_config = this.config[dataset];
+	
+	$('#config_editor_name').val(edit_config.name);
+	$('#config_editor_description').val(edit_config.description);
+	$('#config_editor_source').val(edit_config.source);
+	
+	$('#config_editor_prefixes').empty();
+	$.each(edit_config.prefixes, function (key, value) {
+		var li = $('<li />');
+		li.append('<input type="text" class="config_editor_prefixes_key" value="'+key+'" />');
+		li.append('<input type="text" class="config_editor_prefixes_value" value="'+value+'" />');
+		$('#config_editor_prefixes').append(li);
+	});
+	
+	$('#config_editor_prefixes_add').click(function() {
+		var li = $('<li />');
+		li.append('<input type="text" class="config_editor_prefixes_key" value="" placeholder="Key" />');
+		li.append('<input type="text" class="config_editor_prefixes_value" value="" placeholder="Value" />');
+		$('#config_editor_prefixes').append(li);
+	});
+	
+	$('#config-editor').data('dataset',dataset);
+}
+
+environment.saveDataset = function () {
+	var dataset = $('#config-editor').data('dataset');
+	
+	if (dataset !=  $('#config_editor_name').val()) {
+		this.config[$('#config_editor_name').val()] = this.config[dataset];
+		this.config[$('#config_editor_name').val()].name = $('#config_editor_name').val();
+		delete this.config[dataset];
+		dataset = $('#config_editor_name').val();
+	}
+	
+	this.config[dataset].description = $('#config_editor_description').val();
+	this.config[dataset].source = $('#config_editor_source').val();
+	
+	var prefixes_new = {};
+	$('#config_editor_prefixes').children().each(function (index,li) {
+		var key = $(li).find('.config_editor_prefixes_key').val();
+		var value = $(li).find('.config_editor_prefixes_value').val();
+		if (key != "" && value != "") {
+			prefixes_new[key] = value;
+		}
+	});
+	
+	this.config[dataset].prefixes = prefixes_new;
+	
+	this.save();
+	this.load();
+	this.displayConfigs();
+	this.loadDataset(dataset);
+	
+	this.editor.close();
+}
+
+environment.deleteDataset = function () {
+	var dataset = $('#config-editor').data('dataset');
+	
+	delete this.config[dataset];
+	this.currentDataset = "";
+	
+	
+	this.save();
+	this.load();
+	this.displayConfigs();
+	this.loadDataset("");
+	
+	this.editor.close();
+	
+}
+
+environment.editor = {};
+environment.editor.open = function () {
+	$('#config-editor').css({
+		'display':'initial',
+		'height':'60%',
+		'top':'10%'
+	});
+}
+
+environment.editor.close = function () {
+	$('#config-editor').css({
+		'display':'none',
+		'height':'0%',
+		'top':'100%'
+	});
 }
 
 environment.loadPlugin = function (plugin) { // sparqplug.in.objectbased
@@ -321,11 +430,11 @@ environment.addToHistory = function (query) {
 }
 
 environment.loadHistory = function () {
-	$("#data-output-history ul").children().remove();
-	
-	$.each(this.config[this.currentDataset].history, function (index, value) {
-		$("#data-output-history ul").prepend(environment.createHistoryli(value,index));
-	});
+	if (this.currentDataset != "") {
+		$.each(this.config[this.currentDataset].history, function (index, value) {
+			$("#data-output-history ul").prepend(environment.createHistoryli(value,index));
+		});
+	}
 }
 
 environment.createHistoryli = function (query, index) {
@@ -361,18 +470,182 @@ environment.clearHistory = function () {
 
 // Minimizing
 
+environment.setupMinimizing = function () {
+	$("#data-input").setStylesForState({
+		'height': '100%',
+		'width':'100%'//'calc(100% - 25px)'
+	},'horizontal-full-open');
+	$("#data-input").setStylesForState({
+		'height': '50%',//'calc(100% - 25px)'
+		'width':'100%'
+	},'horizontal-half-open'); //Be Optimistic!
+	$("#data-input").setStylesForState({
+		'height': '100%',
+		'width': '50%',
+	},'vertical-half-open');
+	$("#data-input").setStylesForState({
+		'height': '100%',
+		'width': '100%',
+	},'vertical-full-open');
+	
+	$("#data-output").setStylesForState({
+		'top':'0%',
+		'height':'100%',
+		'border-top':'0px'
+	},'horizontal-full-open');
+	$("#data-output").setStylesForState({
+		'top':'50%',
+		'height':'50%',
+		'left' : '0%',
+		'width' : '100%'
+	},'horizontal-half-open');
+	$("#data-output").setStylesForState({
+		'top':'100%',
+		'height':'50%'
+	},'horizontal-closed');
+	$("#data-output").setStylesForState({
+		'height': '100%',
+		'width': '50%',
+		'top' : '0%',
+		'left' : '50%'
+	},'vertical-half-open');
+	$("#data-output").setStylesForState({
+		'height': '100%',
+		'width': '100%',
+		'top' : '0%',
+		'left' : '0%'
+	},'vertical-full-open');
+	$("#data-output").setStylesForState({
+		'height': '100%',
+		'width': '50%',
+		'top' : '0%',
+		'left' : '100%',
+		'border-left': '0px'
+	},'vertical-closed');
+	
+	
+	$("#data-area").data('horizontal', true);
+	$('#data-input').jumpToState('horizontal-half-open');
+	$("#data-output").jumpToState('horizontal-half-open');
+	$('#data-output').css('border-top','1px solid #999');
+	
+	//Workspace Setup
+	
+	$('#datasets').setStylesForState({
+		left:'-20%'
+	},'closed');
+	$('#datasets').setStylesForState({
+		left:'0%'
+	},'open');
+	
+	$('#detail').setStylesForState({
+	},'closed');
+	$('#detail').setStylesForState({
+	},'open');
+	
+	$('#data-area').setStylesForState({
+		width:'100%',
+		left: '0%'
+	},'full');
+	$('#data-area').setStylesForState({
+		width:'80%',
+		left: '0%'
+	},'half-left');
+	$('#data-area').setStylesForState({
+		width:'80%',
+		left: '20%'
+	},'half-right');
+	$('#data-area').setStylesForState({
+		width:'60%',
+		left: '20%'
+	},'half');
+	
+	$('#workspace').data('state', "dataarea");
+	$('#datasets').jumpToState('closed');
+	$('#data-area').jumpToState('full');
+	$('#detail').jumpToState('closed');
+}
+
+environment.showDetailView = function () {
+	
+}
+
+environment.hideDetailView = function () {
+	
+}
+
+environment.showDatasets = function () {
+	var state = $('#workspace').data('state');
+	switch (state) {
+		case "dataarea":
+			this.setWorkspaceState('datasets-dataarea');
+			break;
+		case "dataarea-detail":
+			this.setWorkspaceState('datasets-dataarea-detail');
+			break;
+		default:
+	}
+}
+
+environment.hideDatasets = function () {
+	var state = $('#workspace').data('state');
+	switch (state) {
+		case "datasets-dataarea":
+			this.setWorkspaceState('dataarea');
+			break;
+		case "datasets-dataarea-detail":
+			this.setWorkspaceState('dataarea-detail');
+			break;
+		default:
+	}
+}
+
+environment.setWorkspaceState = function (state) {
+	$('#workspace').data('state',state);
+	switch (state) {
+		case "dataarea":
+			$('#datasets').animateToState('closed');
+			$('#data-area').animateToState('full');
+			$('#detail').animateToState('closed');
+			break;
+		case "datasets-dataarea":
+			$('#datasets').animateToState('open');
+			$('#data-area').animateToState('half-right');
+			$('#detail').animateToState('closed');
+			break;
+		case "datasets-dataarea-detail":
+			$('#datasets').animateToState('open');
+			$('#data-area').animateToState('half');
+			$('#detail').animateToState('open');
+			break;
+		case "dataarea-detail":
+			$('#datasets').animateToState('closed');
+			$('#data-area').animateToState('half-left');
+			$('#detail').animateToState('open');
+			break;
+			
+		default:
+		
+	}
+}
+
 environment.equalizeInputsOutputs = function () {
 	$('#menu-window').children().removeClass('selected');
 	$('#window-equal').addClass('selected');
 	
 	$('#'+this.currentOutPlugin+"-tab").addClass('selected');
-	$('#data-input').css('height','50%');
-	$('#data-input').css('border-bottom','1px solid #999');
-	$('#data-output').css('height','50%');
 	$('#'+this.currentInPlugin+"-tab").addClass('selected');
-	$('#data-input').css('height','50%');
-	$('#data-input').css('border-bottom','1px solid #999');
-	$('#data-output').css('height','50%');
+	
+	if ($("#data-area").data('horizontal')) {
+		$('#data-input').animateToState('horizontal-half-open');
+		$('#data-output').animateToState('horizontal-half-open');
+		$('#data-output').css('border-top','1px solid #999');
+	} else {
+		$('#data-input').animateToState('vertical-half-open');
+		$('#data-output').animateToState('vertical-half-open');
+		$('#data-output').css('border-left','1px solid #999');
+	}
+	
 }
 
 environment.maximizeOutputs = function () {
@@ -381,9 +654,14 @@ environment.maximizeOutputs = function () {
 	
 	$('#data-input .panel-menu-tabs').children().removeClass('selected');
 	$('#'+this.currentOutPlugin+"-tab").addClass('selected');
-	$('#data-input').css('height','25px');
-	$('#data-input').css('border-bottom','0px');
-	$('#data-output').css('height','calc(100% - 25px)');
+	
+	if ($("#data-area").data('horizontal')) {
+		$('#data-input').animateToState('horizontal-half-open');
+		$("#data-output").animateToState('horizontal-full-open');
+	} else {
+		$('#data-input').animateToState('vertical-half-open');
+		$("#data-output").animateToState('vertical-full-open');
+	}
 }
 
 environment.maximizeInputs = function () {
@@ -392,9 +670,51 @@ environment.maximizeInputs = function () {
 	
 	$('#data-output .panel-menu-tabs').children().removeClass('selected');
 	$('#'+this.currentInPlugin+"-tab").addClass('selected');
-	$('#data-output').css('height','25px');
-	$('#data-output').css('border-bottom','0px');
-	$('#data-input').css('border-bottom','1px solid #999');
-	$('#data-input').css('height','calc(100% - 25px)');
+	
+	if ($("#data-area").data('horizontal')) {
+		$('#data-input').animateToState('horizontal-full-open');
+		$('#data-output').animateToState('horizontal-closed');
+	} else {
+		$('#data-input').animateToState('vertical-full-open');
+		$('#data-output').animateToState('vertical-closed');
+	}
 }
+
+environment.rotateDatasetViews = function () {
+	if ($("#data-area").data('horizontal')) {
+		$("#data-area").data('horizontal', false);
+		$('#data-input').jumpToState('vertical-half-open');
+		$('#data-output').jumpToState('vertical-half-open');
+		$('#data-output').css('border-left','1px solid #999');
+		$('#data-output').css('border-top','0px solid #999');
+		$('#data-output').css('margin-left','-1px');
+		$("#menu-window").addClass('rotate');
+	} else {
+		$("#data-area").data('horizontal', true);
+		$('#data-input').jumpToState('horizontal-half-open');
+		$('#data-output').jumpToState('horizontal-half-open');
+		$('#data-output').css('border-left','0px solid #999');
+		$('#data-output').css('border-top','1px solid #999');
+		$('#data-output').css('margin-left','0px');
+		$("#menu-window").removeClass('rotate');
+	}
+	
+}
+
+/* Extender to jQuery for saving minimized states */
+
+;(function( $ ) {
+	 
+    $.fn.setStylesForState = function(styles , state) {
+		$(this).data('style-'+state,styles);
+	}
+	
+	$.fn.animateToState = function (state) {
+		$(this).animate($(this).data('style-'+state));
+	}
+	$.fn.jumpToState = function (state) {
+		$(this).css($(this).data('style-'+state));
+	}
+	
+}( jQuery ));
 

@@ -30,10 +30,16 @@
 		</script>
 	</head>
 	<body>
-		<div id="menu"><div id="menu-title">SPARQL Environment</div><div id='menu-window'>
-			<a class='icons selected' id='window-equal' href='javascript:environment.equalizeInputsOutputs()'>&#xe602;</a>
-			<a class='icons' id='window-output' href='javascript:environment.maximizeOutputs()'>&#xe600;</a>
-			<a class='icons' id='window-input' href='javascript:environment.maximizeInputs()'>&#xe601;</a>
+		<div id="menu">
+		<div id="menu-tools">
+			<div id='menu-datasets'><span id="datasets-icon" class="icons">&#xf1c0;</span><span class='name'>fufolio</span></div>
+		</div>
+			<div id="menu-title">SPARQL Environment</div>
+		<div id='menu-window'>
+			<a class='icons selected' id='window-equal' href='javascript:environment.equalizeInputsOutputs()'><div>&#xe602;</div></a>
+			<a class='icons' id='window-output' href='javascript:environment.maximizeOutputs()'><div>&#xe600;</div></a>
+			<a class='icons' id='window-input' href='javascript:environment.maximizeInputs()'><div>&#xe601;</div></a>
+			<a class='icons' id='window-input' href='javascript:environment.rotateDatasetViews()'>&#xf01e;</a>
 			<a class="icons" id='fullScreen'>&#xf065;</a></div></div>
 		<div id="workspace">
 			<div id="datasets">
@@ -59,6 +65,7 @@
 							<!--<a href="javascript:environment.viewPlugin('sparqplug-in-objectbased');"  id='sparqplug-in-objectbased-tab'><span class="icons">&#xf041;</span> Geo Search</a>-->
 						</div>
 						<a class="icons panel-menu-tools" title="SparqIt" href="">&#xf045;</a>
+						<a class="icons panel-menu-tools" title="Save Query" href="">&#xf0c7;</a>
 					</div>
 					<div id="inputs">
 						<!--<div class='plugin-in' id='sparqplug-in-text'>
@@ -118,10 +125,12 @@
 			<input type='text' value='' placeholder="Description of dataset" id='config_editor_description' /><br/>
 			<input type='text' value='' placeholder="Source node for dataset" id='config_editor_source' /><br/>
 			<div>
+			<ul id="config_editor_prefixes">
 				<li><input type="text" placeholder="Prefix Key" value="prefix-key" /><input type="text" value="prefix-value" placeholder="Prefix Value"></li>
-				<a href='' class='icons'>&#xf055;</a>
+			</ul>
+				<div id="config_editor_prefixes_add" class='icons'>&#xf055;</div>
 			</div>
-			<div>Save</div>
+			<a class='btn' href='javascript:environment.saveDataset();'>Save</a> | <a class='btn' href='javascript:environment.editor.close();'>Cancel</a> | <a class='btn' href='javascript:environment.deleteDataset();'>Delete</a>
 		</div>
 	</body>
 </html>

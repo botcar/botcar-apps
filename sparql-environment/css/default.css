@@ -19,13 +19,7 @@ a:hover {
 	width:calc(100% - 16px);
 	height:20px;
 	/*background:#C1CFE4;*/
-	background: #ffffff; /* Old browsers */
-	background: -moz-linear-gradient(top, #ffffff 0%, #dddddd 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#dddddd)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #ffffff 0%,#dddddd 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #ffffff 0%,#dddddd 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #ffffff 0%,#dddddd 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #ffffff 0%,#dddddd 100%); /* W3C */
+	background: #F9F9F9; /* Old browsers */
 	margin:0px;
 	padding:8px;
 	border-bottom:1px solid #999;
@@ -33,7 +27,19 @@ a:hover {
 	position:fixed;
 }
 
+#menu-tools {
+	float:left;
+	width:25%;
+}
+
+#menu-tools #menu-datasets .name {
+	font-size:12px;
+	margin-left: 5px;
+}
+
 #menu-title {
+	float:left;
+	width:50%;
 	text-align: center;
 }
 
@@ -46,6 +52,14 @@ a:hover {
 	right: 6px;
 	background:#EEE;
 	overflow:hidden;
+}
+
+#menu-window.rotate div {  
+  -webkit-transform:rotate(270deg);
+  -moz-transform:rotate(270deg);
+  -o-transform:rotate(270deg);
+  /* filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=1.5); */
+  -ms-transform:rotate(270deg);   
 }
 
 #menu-window a {
@@ -67,6 +81,7 @@ a:hover {
 	border-right:0px;
 }
 
+
 #workspace {
 	width:100%;
 	height: calc( 100% - 37px );
@@ -82,7 +97,8 @@ a:hover {
 	overflow: scroll;
 	z-index: 0;
 	background:#F3F5FA;
-	
+	position:absolute;
+	left:0%;
 }
 
 #datasets-icon {
@@ -156,14 +172,16 @@ a:hover {
 	border-left: 1px solid #AAA;
 	margin-left:-1px;
 	z-index: 1;
-	position:relative;
+	position:absolute;
+	left:20%;
 	background:#FFF;
 }
 
 #data-input {
 	width: 100%;
 	height: 50%;
-	border-bottom: 1px solid #999;
+	
+	background:inherit;
 	
 }
 
@@ -183,6 +201,8 @@ a:hover {
 #data-output {
 	width: 100%;
 	height: 50%;
+	position: absolute;
+	background:inherit;
 }
 #data-output-history {
 	width: calc(25% - 1px);
